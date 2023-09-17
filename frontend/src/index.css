@@ -1,0 +1,19 @@
+@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
+
+.Sci-Fi-Buddy_Heading {
+  font-family: 'Alfa Slab One', cursive;
+  font-size: 1.5rem;
+  background-color: silver;
+}
+
+.heading {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 10px;
+  padding: 0 20px;
+  text-align: center;
+}
+
+.heading p {
+  color: #828282;
+}
