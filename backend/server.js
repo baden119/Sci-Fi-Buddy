@@ -1,6 +1,6 @@
 const express = require('express');
 const path = require('path');
-var cors = require('cors');
+const cors = require('cors');
 const dotenv = require('dotenv').config();
 const { errorHandler } = require('./middleware/errorMiddleware');
 // const connectDB = require('./config/db');
@@ -10,11 +10,11 @@ const version = 'dev01';
 // connectDB();
 
 const app = express();
-// app.use(
-//   cors({
-//     origin: 'https://pig-iron-app.onrender.com',
-//   })
-// );
+app.use(
+  cors({
+    origin: 'https://sci-fi-buddy-app.onrender.com',
+  })
+);
 
 app.use(express.json());
 
