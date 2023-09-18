@@ -13,46 +13,43 @@ const userCollection = client.db(dbname).collection(collection_name);
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
-  // const { name, password } = req.body;
+  const { name, password } = req.body;
 
-  // if (!name || !password) {
-  //   res.status(400);
-  //   throw new Error('Please add all fields');
-  // }
+  if (!name || !password) {
+    res.status(400);
+    throw new Error('Please add all fields');
+  }
 
-  // const userExists = await getUserData(name);
+  const userExists = await getUserData(name);
 
-  // if (userExists) {
-  //   res.status(400);
-  //   throw new Error('User Already Exists');
-  // }
+  if (userExists) {
+    res.status(400);
+    throw new Error('User Already Exists');
+  }
 
-  // // Hash password
-  // const salt = await bcrypt.genSalt(10);
-  // const hashedPassword = await bcrypt.hash(password, salt);
+  // Hash password
+  const salt = await bcrypt.genSalt(10);
+  const hashedPassword = await bcrypt.hash(password, salt);
 
-  // // Create user
-  // const user = {
-  //   name,
-  //   password: hashedPassword,
-  // };
+  // Create user
+  const user = {
+    name,
+    password: hashedPassword,
+  };
 
-  // try {
-  //   await connectToDatabase();
-  //   // insertOne method is used here to insert the sampleAccount document
-  //   let result = await userCollection.insertOne(user);
-  //   res.status(201).json({
-  //     token: generateToken(result.insertedId),
-  //   });
-  // } catch (err) {
-  //   console.error(`Error Registering New User: ${err}`);
-  // } finally {
-  //   await client.close();
-  // }
-
-  res.status(201).json({
-    message: 'Request recieved on API Register route! :)',
-  });
+  try {
+    await connectToDatabase();
+    // insertOne method is used here to insert the sampleAccount document
+    let result = await userCollection.insertOne(user);
+    res.status(201).json({
+      name,
+      token: generateToken(result.insertedId),
+    });
+  } catch (err) {
+    console.error(`Error Registering New User: ${err}`);
+  } finally {
+    await client.close();
+  }
 });
 
 // @desc    Log In a user
@@ -64,11 +61,9 @@ const loginUser = asyncHandler(async (req, res) => {
   // Check for user name
   const user = await getUserData(name);
 
-  console.log('login Route');
-  console.log(user);
-
   if (user && (await bcrypt.compare(password, user.password))) {
     res.json({
+      name,
       token: generateToken(user._id),
     });
   } else {

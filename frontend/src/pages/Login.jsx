@@ -1,8 +1,8 @@
-import { useState } from 'react';
-// import { useAuth, login, clearAuthErrors } from '../context/auth/AuthState';
-// import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useAuth, login, clearAuthErrors } from '../context/auth/AuthState';
+import { useNavigate } from 'react-router-dom';
 import { FaSignInAlt } from 'react-icons/fa';
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
@@ -10,27 +10,27 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 const Login = () => {
-  //   const [authState, authDispatch] = useAuth();
-  //   const { user, authError } = authState;
-  //   const navigate = useNavigate();
+  const [authState, authDispatch] = useAuth();
+  const { user, authError } = authState;
+  const navigate = useNavigate();
 
-  //   useEffect(() => {
-  //     if (authError) {
-  //       toast.error(authError);
-  //       clearAuthErrors(authDispatch);
-  //     }
+  useEffect(() => {
+    if (authError) {
+      toast.error(authError);
+      clearAuthErrors(authDispatch);
+    }
 
-  //     if (user) {
-  //       navigate('/');
-  //     }
-  //   }, [user, navigate, authDispatch, authError]);
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate, authDispatch, authError]);
 
   const [formData, setFormData] = useState({
-    email: '',
+    name: '',
     password: '',
   });
 
-  const { email, password } = formData;
+  const { name, password } = formData;
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -42,7 +42,7 @@ const Login = () => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    // login(authDispatch, formData);
+    login(authDispatch, formData);
   };
   return (
     <Container>
@@ -56,17 +56,16 @@ const Login = () => {
             <p>Login to your account</p>
           </section>
           <Form onSubmit={onSubmit}>
-            <Form.Group className='mb-3' controlId='email'>
+            <Form.Group className='mb-3' controlId='name'>
               <Form.Control
                 required
-                type='email'
-                placeholder='Enter Email'
-                name='email'
-                value={email}
+                type='text'
+                name='name'
+                value={name}
+                placeholder='Enter User Name'
                 onChange={onChange}
               />
             </Form.Group>
-
             <Form.Group className='mb-3' controlId='password'>
               <Form.Control
                 required

@@ -1,8 +1,8 @@
-import { useState } from 'react';
-// import { useAuth, register, clearAuthErrors } from '../context/auth/AuthState';
-// import { useNavigate } from 'react-router-dom';
+import { useState, useEffect } from 'react';
+import { useAuth, register, clearAuthErrors } from '../context/auth/AuthState';
+import { useNavigate } from 'react-router-dom';
 import { FaUserAstronaut } from 'react-icons/fa';
-// import { toast } from 'react-toastify';
+import { toast } from 'react-toastify';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Container from 'react-bootstrap/Container';
@@ -10,29 +10,28 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 const Register = () => {
-  //   const [authState, authDispatch] = useAuth();
-  //   const { user, authError } = authState;
-  //   const navigate = useNavigate();
+  const [authState, authDispatch] = useAuth();
+  const { user, authError } = authState;
+  const navigate = useNavigate();
 
-  //   useEffect(() => {
-  //     if (authError) {
-  //       toast.error(authError);
-  //       clearAuthErrors(authDispatch);
-  //     }
+  useEffect(() => {
+    if (authError) {
+      toast.error(authError);
+      clearAuthErrors(authDispatch);
+    }
 
-  //     if (user) {
-  //       navigate('/');
-  //     }
-  //   }, [user, navigate, authDispatch, authError]);
+    if (user) {
+      navigate('/');
+    }
+  }, [user, navigate, authDispatch, authError]);
 
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
     password: '',
     password2: '',
   });
 
-  const { name, email, password, password2 } = formData;
+  const { name, password, password2 } = formData;
 
   const onChange = (e) => {
     setFormData((prevState) => ({
@@ -44,18 +43,17 @@ const Register = () => {
   const onSubmit = (e) => {
     e.preventDefault();
 
-    // if (name === '' || email === '' || password === '') {
-    //   toast.error('...Please Complete All Fields');
-    // } else if (password !== password2) {
-    //   toast.error('Passwords do not match');
-    // } else {
-    //   const formData = {
-    //     name,
-    //     email,
-    //     password,
-    //   };
-    //   register(authDispatch, formData);
-    // }
+    if (name === '' || password === '') {
+      toast.error('...Please Complete All Fields');
+    } else if (password !== password2) {
+      toast.error('Passwords do not match');
+    } else {
+      const formData = {
+        name,
+        password,
+      };
+      register(authDispatch, formData);
+    }
   };
 
   return (
@@ -79,18 +77,7 @@ const Register = () => {
                   // id='name'
                   name='name'
                   value={name}
-                  placeholder='Enter your name'
-                  onChange={onChange}
-                />
-              </Form.Group>
-
-              <Form.Group className='mb-3' controlId='email'>
-                <Form.Control
-                  required
-                  type='email'
-                  placeholder='Enter Email'
-                  name='email'
-                  value={email}
+                  placeholder='Choose a User Name'
                   onChange={onChange}
                 />
               </Form.Group>
