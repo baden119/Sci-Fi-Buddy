@@ -26,6 +26,16 @@ body {
   color: #bdfdcd;
 }
 
-.Accordion {
-  background-color: green;
+#novelModalHeader {
+  background-color: lightblue;
+}
+
+#novelModalBody {
+  background-color: lightblue;
+}
+
+.modalImage {
+  width: auto;
+  min-height: 40vh;
+  max-height: 40vh;
 }

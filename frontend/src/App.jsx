@@ -17,7 +17,7 @@ const App = () => {
         <Router>
           <Container className='App'>
             <Header />
-            <Navpills />
+            {/* <Navpills /> */}
             <Routes>
               <Route path='/' element={<Dashboard />} />
               <Route path='/about' element={<About />} />
