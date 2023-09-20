@@ -3,6 +3,7 @@ import AuthState from './context/auth/AuthState';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Header from './layout/Header';
+import Navpills from './layout/Navpills';
 import About from './pages/About';
 import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
@@ -16,6 +17,7 @@ const App = () => {
         <Router>
           <Container className='App'>
             <Header />
+            <Navpills />
             <Routes>
               <Route path='/' element={<Dashboard />} />
               <Route path='/about' element={<About />} />

@@ -1,9 +1,17 @@
 @import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
 
+body {
+  background-color: lightblue;
+}
+
+.App {
+  background-color: rgb(121, 166, 177);
+}
+
 .Sci-Fi-Buddy_Heading {
   font-family: 'Alfa Slab One', cursive;
   font-size: 1.5rem;
-  background-color: silver;
+  background-color: rgb(158, 145, 145);
 }
 
 .heading {
@@ -15,5 +23,9 @@
 }
 
 .heading p {
-  color: #828282;
+  color: #bdfdcd;
+}
+
+.Accordion {
+  background-color: green;
 }

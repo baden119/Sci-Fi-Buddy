@@ -3,11 +3,8 @@ const path = require('path');
 const cors = require('cors');
 const dotenv = require('dotenv').config();
 const { errorHandler } = require('./middleware/errorMiddleware');
-// const connectDB = require('./config/db');
 const port = process.env.PORT || 5000;
 const version = 'dev01';
-
-// connectDB();
 
 const app = express();
 app.use(
@@ -21,6 +18,9 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
 app.use('/api/users', require('./routes/userRoutes'));
+app.use('/api/search', require('./routes/searchRoutes'));
+app.use('/api/awards', require('./routes/awardRoutes'));
+
 app.get('/api/version', (req, res) => {
   res.send('Server Version: ' + version);
 });
