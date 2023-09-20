@@ -35,7 +35,9 @@ body {
 }
 
 .modalImage {
-  width: auto;
-  min-height: 40vh;
-  max-height: 40vh;
+  height: auto;
+  /* min-height: 40vh;
+  max-height: 40vh; */
+  min-width: 20vh;
+  max-width: 20vh;
 }

@@ -6,6 +6,7 @@ import Modal from 'react-bootstrap/Modal';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
+import ReactStars from 'react-rating-stars-component';
 // import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
@@ -23,6 +24,7 @@ const SearchBox = () => {
   const [selectedNovel, setSelectedNovel] = useState(null);
   const [awards, setAwards] = useState([]);
   const [showModal, setShowModal] = useState(false);
+  const [inReadList, setInReadList] = useState(false);
 
   const handleClose = () => {
     setShowModal(false);
@@ -78,6 +80,14 @@ const SearchBox = () => {
     );
   };
 
+  const handleRatingChange = (newRating) => {
+    console.log(newRating);
+  };
+
+  const toggleReadList = () => {
+    setInReadList(!inReadList);
+  };
+
   return (
     <>
       <div className='mb-4'>
@@ -120,7 +130,7 @@ const SearchBox = () => {
                                   {award.winner ? <FaTrophy /> : <FaMedal />}
                                 </span>
                                 <span>
-                                  {award.award}, {award.year}{' '}
+                                  {award.award} - {award.year}
                                 </span>
                               </ListGroup.Item>
                             );
@@ -130,13 +140,37 @@ const SearchBox = () => {
                     </Col>
                   </Row>
                   <Row>
-                    <Col xs={6}>
-                      <Button>Add to Completed List</Button>{' '}
-                    </Col>
-                    <Col xs={6}>
-                      <Button> Add To Wishlist</Button>{' '}
-                    </Col>
+                    <Button className='my-2' onClick={toggleReadList}>
+                      Toggle Read List
+                    </Button>
                   </Row>
+                  {inReadList && (
+                    <Row>
+                      <Form>
+                        <Form.Group className='mx-auto d-block'>
+                          <h5>Your Rating</h5>
+                          <ReactStars
+                            value={0}
+                            count={5}
+                            onChange={handleRatingChange}
+                            size={50}
+                            isHalf={true}
+                            activeColor='#ffd700'
+                          />
+                        </Form.Group>
+                        <Form.Group className='mb-3'>
+                          <Form.Control
+                            as='textarea'
+                            rows={3}
+                            placeholder='Your Notes on this book'
+                          />
+                        </Form.Group>
+                        <Form.Group className='mb-3'>
+                          <Button>Save</Button>
+                        </Form.Group>
+                      </Form>
+                    </Row>
+                  )}
                 </Modal.Body>
               </Modal>
             )}
