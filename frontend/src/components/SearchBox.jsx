@@ -13,18 +13,20 @@ import Col from 'react-bootstrap/Col';
 import { FaTrophy } from 'react-icons/fa';
 import { FaMedal } from 'react-icons/fa';
 
-const initialText = '';
-
 const SearchBox = () => {
-  const [formData, setFormData] = useState({
-    text: initialText,
+  const [searchBarText, setSearchBarText] = useState('');
+
+  const [userListData, setUserListData] = useState({
+    list: 'read',
+    rating: null,
+    notes: '',
   });
 
   const [searchResults, setSearchResults] = useState([]);
   const [selectedNovel, setSelectedNovel] = useState(null);
   const [awards, setAwards] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [inReadList, setInReadList] = useState(false);
+  const [inUserList, setInUserList] = useState(false);
 
   const handleClose = () => {
     setShowModal(false);
@@ -33,13 +35,11 @@ const SearchBox = () => {
   };
   const handleShow = () => setShowModal(true);
 
-  const { text } = formData;
-
   useEffect(() => {
     const getAutoComplete = async () => {
       try {
         const res = await axios.post('/api/search/autocomplete', {
-          query: text,
+          query: searchBarText,
         });
         setSearchResults(res.data.results);
       } catch (error) {
@@ -47,8 +47,8 @@ const SearchBox = () => {
       }
     };
 
-    text.length > 2 && getAutoComplete();
-  }, [text]);
+    searchBarText.length > 2 && getAutoComplete();
+  }, [searchBarText]);
 
   useEffect(() => {
     const getAwards = async () => {
@@ -67,8 +67,8 @@ const SearchBox = () => {
     }
   }, [selectedNovel]);
 
-  const onChange = (e) => {
-    setFormData((prevState) => ({
+  const handleNotesText = (e) => {
+    setUserListData((prevState) => ({
       ...prevState,
       [e.target.name]: e.target.value,
     }));
@@ -81,11 +81,14 @@ const SearchBox = () => {
   };
 
   const handleRatingChange = (newRating) => {
-    console.log(newRating);
+    setUserListData((prevState) => ({
+      ...prevState,
+      rating: newRating,
+    }));
   };
 
   const toggleReadList = () => {
-    setInReadList(!inReadList);
+    setInUserList(!inUserList);
   };
 
   return (
@@ -95,18 +98,27 @@ const SearchBox = () => {
           <Col md={3}></Col>
           <Col md={6}>
             {selectedNovel && (
-              <Modal
-                size='lg'
-                show={showModal}
-                onHide={() => handleClose()}
-                aria-labelledby='example-modal-sizes-title-lg'
-              >
+              <Modal size='lg' show={showModal} onHide={() => handleClose()}>
                 <Modal.Header id='novelModalHeader' closeButton>
                   <Modal.Title>
                     {selectedNovel.title} by {selectedNovel.author}
                   </Modal.Title>
                 </Modal.Header>
                 <Modal.Body id='novelModalBody'>
+                  <Row>
+                    <Col xs={3}></Col>
+                    <Col xs={6}>
+                      <div className='d-flex justify-content-around mb-3'>
+                        <Button className='my-2' onClick={toggleReadList}>
+                          Add to Read List
+                        </Button>
+                        <Button className='my-2' onClick={toggleReadList}>
+                          Add to Wish List
+                        </Button>
+                      </div>
+                    </Col>
+                    <Col xs={3}></Col>
+                  </Row>
                   <Row>
                     <Col xs={6}>
                       <Image
@@ -139,39 +151,43 @@ const SearchBox = () => {
                       )}
                     </Col>
                   </Row>
-                  <Row>
-                    <Button className='my-2' onClick={toggleReadList}>
-                      Toggle Read List
-                    </Button>
-                  </Row>
-                  {inReadList && (
-                    <Row>
-                      <Form>
-                        <Form.Group className='mx-auto d-block'>
-                          <h5>Your Rating</h5>
-                          <ReactStars
-                            value={0}
-                            count={5}
-                            onChange={handleRatingChange}
-                            size={50}
-                            isHalf={true}
-                            activeColor='#ffd700'
-                          />
-                        </Form.Group>
-                        <Form.Group className='mb-3'>
-                          <Form.Control
-                            as='textarea'
-                            rows={3}
-                            placeholder='Your Notes on this book'
-                          />
-                        </Form.Group>
-                        <Form.Group className='mb-3'>
-                          <Button>Save</Button>
-                        </Form.Group>
-                      </Form>
-                    </Row>
+
+                  {inUserList && (
+                    <>
+                      <h4 className=' d-flex justify-content-center mt-5 mb-0'>
+                        Rate this book and record some notes...
+                      </h4>
+                      <Row>
+                        <Form>
+                          <Form.Group className='d-flex justify-content-center'>
+                            <ReactStars
+                              value={0}
+                              count={5}
+                              onChange={handleRatingChange}
+                              size={50}
+                              isHalf={true}
+                              activeColor='#ffd700'
+                            />
+                          </Form.Group>
+                          <Form.Group className='mb-3'>
+                            <Form.Control
+                              as='textarea'
+                              rows={3}
+                              placeholder='Your Notes on this book'
+                              name='notes'
+                              value={userListData.notes}
+                              onChange={handleNotesText}
+                            />
+                          </Form.Group>
+                          <Form.Group className='mb-3'>
+                            <Button>Save</Button>
+                          </Form.Group>
+                        </Form>
+                      </Row>
+                    </>
                   )}
                 </Modal.Body>
+                <Modal.Footer id='novelModalHeader'></Modal.Footer>
               </Modal>
             )}
             <Form autoComplete='off'>
@@ -181,8 +197,8 @@ const SearchBox = () => {
                   type='text'
                   size='lg'
                   name='text'
-                  value={text}
-                  onChange={onChange}
+                  value={searchBarText}
+                  onChange={(e) => setSearchBarText(e.target.value)}
                 />
               </InputGroup>
             </Form>

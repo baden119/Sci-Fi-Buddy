@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Alfa+Slab+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Exo:wght@500&display=swap');
 
 body {
   background-color: lightblue;
@@ -9,8 +9,6 @@ body {
 }
 
 .Sci-Fi-Buddy_Heading {
-  font-family: 'Alfa Slab One', cursive;
-  font-size: 1.5rem;
   background-color: rgb(158, 145, 145);
 }
 
@@ -40,4 +38,9 @@ body {
   max-height: 40vh; */
   min-width: 20vh;
   max-width: 20vh;
+}
+
+.brandText {
+  font-family: 'Exo', cursive;
+  font-size: 2rem !important;
 }
