@@ -1,17 +1,15 @@
-const { MongoClient } = require('mongodb');
 const asyncHandler = require('express-async-handler');
-const uri = process.env.MONGO_URI;
-
-const client = new MongoClient(uri);
-const dbname = 'Buddy-Data';
-const collection_name = 'Novels';
-const novelsCollection = client.db(dbname).collection(collection_name);
 
 // @desc    Autocomplete search querys
 // @route   POST /api/search/autocomplete
 // @access  Public
 
 const autocomplete = asyncHandler(async (req, res) => {
+  // Pull connection client into module and specify Database and Collection
+  const client = req.app.locals.client;
+  const db = client.db('Buddy-Data');
+  const collection = db.collection('Novels');
+
   const query = req.body.query;
 
   const agg = [
@@ -53,14 +51,10 @@ const autocomplete = asyncHandler(async (req, res) => {
   ];
 
   try {
-    await client.connect();
-    let results = await novelsCollection.aggregate(agg).toArray();
+    let results = await collection.aggregate(agg).toArray();
     res.status(200).json({ results });
   } catch (err) {
-    console.log('is the error here??');
-    console.error(`Error connecting to the database: ${err}`);
-  } finally {
-    await client.close();
+    console.error(`Error in Autocorrect Route ${err}`);
   }
 });
 

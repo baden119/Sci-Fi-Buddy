@@ -1,17 +1,13 @@
-const { MongoClient } = require('mongodb');
 const ObjectId = require('mongodb').ObjectId;
 const jwt = require('jsonwebtoken');
 const asyncHandler = require('express-async-handler');
 
-const uri = process.env.MONGO_URI;
-
-const client = new MongoClient(uri);
-const dbname = 'Auth';
-const collection_name = 'Users';
-
-const usersCollection = client.db(dbname).collection(collection_name);
-
 const protect = asyncHandler(async (req, res, next) => {
+  // Pull connection client into module and specify Database and Collection
+  const client = req.app.locals.client;
+  const db = client.db('Auth');
+  const collection = db.collection('Users');
+
   let token;
 
   if (
@@ -29,7 +25,7 @@ const protect = asyncHandler(async (req, res, next) => {
       // This will mean you can access req.user in any route thats protected.
       // We've sent the ID along in the generateToken function of the userController file.
 
-      req.user = await findUserByID(decoded.id);
+      req.user = await findUserByID(decoded.id, collection);
 
       next();
     } catch (error) {
@@ -45,29 +41,15 @@ const protect = asyncHandler(async (req, res, next) => {
   }
 });
 
-const findUserByID = async (id) => {
+const findUserByID = async (id, collection) => {
   try {
-    await connectToDatabase();
-    // findOne() method is used here to find a the first document that matches the filter
-    let userData = await usersCollection.findOne(
+    let userData = await collection.findOne(
       { _id: new ObjectId(id) },
       { projection: { password: 0 } }
     );
     return userData;
   } catch (err) {
     console.error(`Server middleware error checking user info: ${err}`);
-  } finally {
-    await client.close();
-  }
-};
-
-// Connect to MongoDB
-const connectToDatabase = async () => {
-  try {
-    await client.connect();
-    console.log(`Connected to the ${dbname} database`);
-  } catch (err) {
-    console.error(`Error connecting to the ${dbname} database`);
   }
 };
 

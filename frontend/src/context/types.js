@@ -1,12 +1,3 @@
-// Resources
-export const CREATE_IRON = 'CREATE_IRON';
-export const READ_IRON = 'READ_IRON';
-export const UPDATE_IRON = 'UPDATE_IRON';
-export const DELETE_IRON = 'DELETE_IRON';
-export const CLEAR_IRON = 'CLEAR_IRON';
-export const SET_CURRENT = 'SET_CURRENT';
-export const CLEAR_CURRENT = 'CLEAR_CURRENT';
-
 // Auth
 export const REGISTER_SUCCESS = 'REGISTER_SUCCESS';
 export const REGISTER_FAIL = 'REGISTER_FAIL';
@@ -15,6 +6,14 @@ export const LOGIN_FAIL = 'LOGIN_FAIL';
 export const LOGOUT = 'LOGOUT';
 export const CLEAR_ERRORS = 'CLEAR_ERRORS';
 
-// Books
-
-export const SET_SEARCH_RESULTS = 'SET_SERCH_RESULTS';
+// Novels
+export const SET_AUTOCOMPLETE_RESULTS = 'SET_AUTOCOMPLETE_RESULTS';
+export const SET_SELECTED_NOVEL = 'SET_SELECTED_NOVEL';
+export const CLEAR_SELECTED_NOVEL = 'CLEAR_SELECTED_NOVEL';
+export const SET_AWARDS = 'SET_AWARDS';
+export const CLEAR_AWARDS = 'CLEAR_AWARDS';
+export const CREATE_RECORD = 'CREATE_RECORD';
+export const READ_RECORDS = 'READ_RECORD';
+export const UPDATE_RECORD = 'UPDATE_RECORD';
+export const DELETE_RECORD = 'DELETE_RECORD';
+export const CLEAR_RECORDS = 'CLEAR_RECORDS';

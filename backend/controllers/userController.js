@@ -1,18 +1,17 @@
 const jwt = require('jsonwebtoken');
-const { MongoClient } = require('mongodb');
 const bcrypt = require('bcryptjs');
 const asyncHandler = require('express-async-handler');
-const uri = process.env.MONGO_URI;
-
-const client = new MongoClient(uri);
-const dbname = 'Auth';
-const collection_name = 'Users';
-const userCollection = client.db(dbname).collection(collection_name);
 
 // @desc    Register new user
 // @route   POST /api/users
 // @access  Public
 const registerUser = asyncHandler(async (req, res) => {
+  // Pull connection client into module and specify Database and Collection
+  const client = req.app.locals.client;
+  const db = client.db('Auth');
+  const collection = db.collection('Users');
+  console.log('register route 01');
+
   const { name, password } = req.body;
 
   if (!name || !password) {
@@ -20,7 +19,7 @@ const registerUser = asyncHandler(async (req, res) => {
     throw new Error('Please add all fields');
   }
 
-  const userExists = await getUserData(name);
+  const userExists = await getUserData(collection, name);
 
   if (userExists) {
     res.status(400);
@@ -38,17 +37,14 @@ const registerUser = asyncHandler(async (req, res) => {
   };
 
   try {
-    await connectToDatabase();
     // insertOne method is used here to insert the sampleAccount document
-    let result = await userCollection.insertOne(user);
+    let result = await collection.insertOne(user);
     res.status(201).json({
       name,
       token: generateToken(result.insertedId),
     });
   } catch (err) {
     console.error(`Error Registering New User: ${err}`);
-  } finally {
-    await client.close();
   }
 });
 
@@ -56,11 +52,17 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route   POST /api/users/login
 // @access  Public
 const loginUser = asyncHandler(async (req, res) => {
+  // Pull connection client into module and specify Database and Collection
+  const client = req.app.locals.client;
+  const db = client.db('Auth');
+  const collection = db.collection('Users');
+
   const { name, password } = req.body;
 
-  // Check for user name
-  const user = await getUserData(name);
+  // Check for user in DB
+  const user = await getUserData(collection, name);
 
+  // Check password, generate token
   if (user && (await bcrypt.compare(password, user.password))) {
     res.json({
       name,
@@ -79,27 +81,13 @@ const getMe = asyncHandler(async (req, res) => {
   res.status(200).json(req.user);
 });
 
-// Connect to MongoDB
-const connectToDatabase = async () => {
-  try {
-    await client.connect();
-    console.log(`Connected to the ${dbname} database`);
-  } catch (err) {
-    console.error(`Error connecting to the ${dbname} database`);
-  }
-};
-
 // Check a user exists in the database
-const getUserData = async (name) => {
+const getUserData = async (collection, name) => {
   try {
-    await connectToDatabase();
-    // findOne() method is used here to find a the first document that matches the filter
-    let userExists = await userCollection.findOne({ name });
+    let userExists = await collection.findOne({ name });
     return userExists;
   } catch (err) {
     console.error(`Server Error checking registration info: ${err}`);
-  } finally {
-    await client.close();
   }
 };
 
