@@ -26,11 +26,13 @@ const createRecord = asyncHandler(async (req, res) => {
     list,
     rating,
     notes,
+    dateAdded: new Date(),
   };
 
   try {
     let result = await collection.insertOne(record);
-    res.status(200).json({ message: 'Created Record: ' + result.insertedId });
+    record._id = result.insertedID;
+    res.status(200).json({ record });
   } catch (err) {
     console.error(
       `Error Creating Record (recordsController/createRecord): ${err}`

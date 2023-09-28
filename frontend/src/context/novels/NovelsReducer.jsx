@@ -9,6 +9,7 @@ import {
   UPDATE_RECORD,
   DELETE_RECORD,
   CLEAR_RECORDS,
+  SET_LOADING,
 } from '../types';
 
 const NovelsReducer = (state, action) => {
@@ -38,6 +39,14 @@ const NovelsReducer = (state, action) => {
         ...state,
         awards: null,
       };
+    case CREATE_RECORD:
+      console.log('create record, about to set new records and loading: false');
+      return {
+        ...state,
+        records: [action.payload, ...state.records],
+        loading: false,
+      };
+
     case READ_RECORDS:
       return {
         ...state,
@@ -47,6 +56,11 @@ const NovelsReducer = (state, action) => {
       return {
         ...state,
         records: null,
+      };
+    case SET_LOADING:
+      return {
+        ...state,
+        loading: true,
       };
 
     default:

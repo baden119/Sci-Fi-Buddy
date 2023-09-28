@@ -23,10 +23,8 @@ const Results = (props) => {
     }
   }, [selectedNovel]);
 
-  const handleClose = () => {
+  const handleHideModal = () => {
     setShowModal(false);
-    clearSelectedNovel(novelsDispatch);
-    clearAwards(novelsDispatch);
   };
   const handleNovelSelect = (e) => {
     setSelectedNovel(
@@ -37,7 +35,7 @@ const Results = (props) => {
 
   return (
     <>
-      <NovelModal handleClose={handleClose} showModal={showModal} />
+      <NovelModal handleClose={handleHideModal} showModal={showModal} />
       <ListGroup>
         {results.map((result) => {
           return (

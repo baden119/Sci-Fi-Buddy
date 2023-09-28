@@ -14,6 +14,7 @@ import {
   UPDATE_RECORD,
   DELETE_RECORD,
   CLEAR_RECORDS,
+  SET_LOADING,
 } from '../types';
 
 // Create a custom hook to use the novels context
@@ -39,7 +40,6 @@ export const getAutoComplete = async (dispatch, searchBarText) => {
 
 // Get awards from database
 export const getAwards = async (dispatch, id) => {
-  console.log('Awards Context checkin');
   try {
     const res = await axios.get('/api/awards/' + id);
     dispatch({
@@ -80,11 +80,11 @@ export const createRecord = async (dispatch, data) => {
       },
     };
     const res = await axios.post('/api/records/', recordData, config);
-    console.log(res.data.message);
-    // dispatch({
-    //   type: CREATE_IRON,
-    //   payload: response.data,
-    // });
+    console.log(res.data);
+    dispatch({
+      type: CREATE_RECORD,
+      payload: res.data,
+    });
   } catch (err) {
     console.log('Error in NovelState createRecord:');
     console.log(err);
@@ -103,7 +103,6 @@ export const getRecords = async (dispatch, token) => {
       },
     };
     const res = await axios.get('/api/records/', config);
-    console.log(res.data.results);
     dispatch({
       type: READ_RECORDS,
       payload: res.data.results,
@@ -118,9 +117,16 @@ export const getRecords = async (dispatch, token) => {
   }
 };
 
-export const clearRecords = async (dispatch) => {
+export const clearRecords = (dispatch) => {
   dispatch({
     type: CLEAR_RECORDS,
+  });
+};
+
+export const setLoading = (dispatch) => {
+  console.log('setting loading');
+  dispatch({
+    type: SET_LOADING,
   });
 };
 
@@ -130,6 +136,7 @@ const NovelsState = (props) => {
     selectedNovel: null,
     awards: null,
     records: null,
+    loading: false,
   };
 
   const [state, dispatch] = useReducer(novelsReducer, initialState);

@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useAuth } from '../context/auth/AuthState';
 import { getRecords, useNovels } from '../context/novels/NovelsState';
 import { useNavigate } from 'react-router-dom';
@@ -13,14 +13,13 @@ const Dashboard = () => {
   const [authState, authDispatch] = useAuth();
   const { user } = authState;
   const [novelsState, novelsDispatch] = useNovels();
-  const { records } = novelsState;
+  const { records, loading } = novelsState;
 
   useEffect(() => {
     if (!user) {
       navigate('/login');
     } else {
       if (!records) {
-        console.log('getting records');
         getRecords(novelsDispatch, user.token);
       }
     }
@@ -28,21 +27,25 @@ const Dashboard = () => {
 
   return (
     <>
-      <Tabs
-        defaultActiveKey='search'
-        id='uncontrolled-tab-example'
-        className='mb-3'
-      >
-        {/* <Tab eventKey='browse' title='Browse'>
+      {loading ? (
+        <span className='loader'></span>
+      ) : (
+        <Tabs
+          defaultActiveKey='search'
+          id='uncontrolled-tab-example'
+          className='mb-3'
+        >
+          {/* <Tab eventKey='browse' title='Browse'>
           Browse or something i guess?
         </Tab> */}
-        <Tab eventKey='search' title='Search'>
-          <Search />
-        </Tab>
-        <Tab eventKey='myList' title='My List'>
-          <ReadList />
-        </Tab>
-      </Tabs>
+          <Tab eventKey='search' title='Search'>
+            <Search />
+          </Tab>
+          <Tab eventKey='myList' title='My List'>
+            <ReadList />
+          </Tab>
+        </Tabs>
+      )}
     </>
   );
 };

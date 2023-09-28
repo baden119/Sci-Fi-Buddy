@@ -1,7 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNovels } from '../context/novels/NovelsState';
 import { useAuth } from '../context/auth/AuthState';
-import { getAwards, createRecord } from '../context/novels/NovelsState';
+import {
+  getAwards,
+  createRecord,
+  clearSelectedNovel,
+  clearAwards,
+  setLoading,
+} from '../context/novels/NovelsState';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
 import ReactStars from 'react-rating-stars-component';
@@ -15,18 +21,19 @@ import { FaTrophy } from 'react-icons/fa';
 import { FaMedal } from 'react-icons/fa';
 
 const NovelModal = (props) => {
-  const [novelsState, novelsDispatch] = useNovels();
-  const { selectedNovel, awards } = novelsState;
+  // Destructure Props
+  const { showModal, handleHideModal } = props;
 
+  // Initialise and destructure App level state
+  const [novelsState, novelsDispatch] = useNovels();
+  const { selectedNovel, awards, records } = novelsState;
   const [authState, authDispatch] = useAuth();
   const { user } = authState;
 
-  const { showModal, handleClose } = props;
-
+  // Initialise Component level state
+  const [disableForm, setDisableForm] = useState(false);
   const [show, setShow] = useState(false);
-
   const [inUserList, setInUserList] = useState(false);
-
   const [recordForm, setRecordForm] = useState({
     list: 'read',
     rating: null,
@@ -38,13 +45,43 @@ const NovelModal = (props) => {
     setShow(showModal);
   }, [showModal]);
 
-  // Get awards for selected novel
+  // Handles fetching awards and finding records for selected novel
   useEffect(() => {
     if (selectedNovel) {
-      console.log('Modal Function calling awards context');
+      console.log('sending request to get awards (Why sends twice? TODO)');
       getAwards(novelsDispatch, selectedNovel._id);
+
+      if (records) {
+        const record = records.find(
+          (record) => record.novel_id === selectedNovel._id
+        );
+
+        if (record) {
+          setInUserList(true);
+          setRecordForm({
+            list: record.list,
+            rating: record.rating,
+            notes: record.notes,
+          });
+          setDisableForm(true);
+        }
+      }
     }
-  }, [selectedNovel, novelsDispatch]);
+  }, [selectedNovel, novelsDispatch, records]);
+
+  const handleClose = () => {
+    clearSelectedNovel(novelsDispatch);
+    clearAwards(novelsDispatch);
+    setRecordForm({
+      list: 'read',
+      rating: null,
+      notes: '',
+    });
+    setInUserList(false);
+    setDisableForm(false);
+    handleHideModal();
+    console.log('HandleClose Function finish');
+  };
 
   const handleRecordText = (e) => {
     setRecordForm((prevState) => ({
@@ -53,14 +90,15 @@ const NovelModal = (props) => {
     }));
   };
 
-  const handleRatingChange = (newRating) => {
+  const handleRatingChange = (rating) => {
     setRecordForm((prevState) => ({
       ...prevState,
-      rating: newRating,
+      rating,
     }));
   };
 
   const handleRecordSubmit = (e) => {
+    setLoading(novelsDispatch);
     e.preventDefault();
     const data = {
       recordData: recordForm,
@@ -68,6 +106,8 @@ const NovelModal = (props) => {
     };
     data.recordData.novel_id = selectedNovel._id;
     createRecord(novelsDispatch, data);
+    handleClose();
+    console.log('TOAST: Record Created');
   };
 
   const toggleReadList = () => {
@@ -137,12 +177,14 @@ const NovelModal = (props) => {
                   <Form>
                     <Form.Group className='d-flex justify-content-center'>
                       <ReactStars
+                        name='rating'
                         value={recordForm.rating}
                         count={5}
                         onChange={handleRatingChange}
                         size={50}
                         isHalf={true}
                         activeColor='#ffd700'
+                        edit={!disableForm}
                       />
                     </Form.Group>
                     <Form.Group className='mb-3'>
@@ -153,6 +195,7 @@ const NovelModal = (props) => {
                         name='notes'
                         value={recordForm.notes}
                         onChange={handleRecordText}
+                        disabled={disableForm}
                       />
                     </Form.Group>
                     <Form.Group className='mb-3'>
@@ -172,6 +215,6 @@ const NovelModal = (props) => {
 
 NovelModal.propTypes = {
   showModal: PropTypes.bool,
-  handleClose: PropTypes.func,
+  handleHideModal: PropTypes.func,
 };
 export default NovelModal;

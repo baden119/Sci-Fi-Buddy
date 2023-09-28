@@ -17,3 +17,4 @@ export const READ_RECORDS = 'READ_RECORD';
 export const UPDATE_RECORD = 'UPDATE_RECORD';
 export const DELETE_RECORD = 'DELETE_RECORD';
 export const CLEAR_RECORDS = 'CLEAR_RECORDS';
+export const SET_LOADING = 'SET_LOADING';
