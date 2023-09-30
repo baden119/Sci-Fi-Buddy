@@ -15,6 +15,7 @@ import {
   DELETE_RECORD,
   CLEAR_RECORDS,
   SET_LOADING,
+  CLEAR_AUTOCOMPLETE_RESULTS,
 } from '../types';
 
 // Create a custom hook to use the novels context
@@ -36,6 +37,12 @@ export const getAutoComplete = async (dispatch, searchBarText) => {
   } catch (error) {
     console.error(error);
   }
+};
+
+export const clearAutoComplete = (dispatch) => {
+  dispatch({
+    type: CLEAR_AUTOCOMPLETE_RESULTS,
+  });
 };
 
 // Get awards from database
@@ -80,10 +87,9 @@ export const createRecord = async (dispatch, data) => {
       },
     };
     const res = await axios.post('/api/records/', recordData, config);
-    console.log(res.data);
     dispatch({
       type: CREATE_RECORD,
-      payload: res.data,
+      payload: res.data.record,
     });
   } catch (err) {
     console.log('Error in NovelState createRecord:');

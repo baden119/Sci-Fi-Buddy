@@ -1,16 +1,17 @@
 import { useState, useEffect } from 'react';
-import { useNovels } from '../context/novels/NovelsState';
 import { useAuth } from '../context/auth/AuthState';
 import {
+  useNovels,
   getAwards,
   createRecord,
   clearSelectedNovel,
   clearAwards,
   setLoading,
+  clearAutoComplete,
 } from '../context/novels/NovelsState';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
-import ReactStars from 'react-rating-stars-component';
+import { Rating } from 'react-simple-star-rating';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Row from 'react-bootstrap/Row';
@@ -34,40 +35,45 @@ const NovelModal = (props) => {
   const [disableForm, setDisableForm] = useState(false);
   const [show, setShow] = useState(false);
   const [inUserList, setInUserList] = useState(false);
+  const [editMode, setEditMode] = useState(false);
   const [recordForm, setRecordForm] = useState({
     list: 'read',
     rating: null,
     notes: '',
   });
 
+  const [rating, setRating] = useState(0);
+
   // Handles displaying modal
   useEffect(() => {
     setShow(showModal);
   }, [showModal]);
 
-  // Handles fetching awards and finding records for selected novel
+  // Handles fetching awards when novel selected from list
   useEffect(() => {
     if (selectedNovel) {
-      console.log('sending request to get awards (Why sends twice? TODO)');
       getAwards(novelsDispatch, selectedNovel._id);
+    }
+  }, [selectedNovel, novelsDispatch]);
 
-      if (records) {
-        const record = records.find(
-          (record) => record.novel_id === selectedNovel._id
-        );
+  // Handles finding user records on selected  novel
+  useEffect(() => {
+    if (selectedNovel && records) {
+      const record = records.find(
+        (record) => record.novel_id === selectedNovel._id
+      );
 
-        if (record) {
-          setInUserList(true);
-          setRecordForm({
-            list: record.list,
-            rating: record.rating,
-            notes: record.notes,
-          });
-          setDisableForm(true);
-        }
+      if (record) {
+        setInUserList(true);
+        setRecordForm({
+          list: record.list,
+          rating: record.rating,
+          notes: record.notes,
+        });
+        setDisableForm(true);
       }
     }
-  }, [selectedNovel, novelsDispatch, records]);
+  }, [records, selectedNovel]);
 
   const handleClose = () => {
     clearSelectedNovel(novelsDispatch);
@@ -80,7 +86,6 @@ const NovelModal = (props) => {
     setInUserList(false);
     setDisableForm(false);
     handleHideModal();
-    console.log('HandleClose Function finish');
   };
 
   const handleRecordText = (e) => {
@@ -97,21 +102,37 @@ const NovelModal = (props) => {
     }));
   };
 
-  const handleRecordSubmit = (e) => {
+  const handleRecordSubmit = () => {
     setLoading(novelsDispatch);
-    e.preventDefault();
     const data = {
       recordData: recordForm,
       token: user.token,
     };
     data.recordData.novel_id = selectedNovel._id;
     createRecord(novelsDispatch, data);
+    clearAutoComplete(novelsDispatch);
     handleClose();
     console.log('TOAST: Record Created');
   };
 
-  const toggleReadList = () => {
-    setInUserList(!inUserList);
+  const handleEditMode = () => {
+    setEditMode(true);
+    setDisableForm(false);
+  };
+
+  const renderListButton = () => {
+    if (!inUserList) {
+      return <Button onClick={handleRecordSubmit}>Save</Button>;
+    } else if (inUserList && !editMode) {
+      return <Button onClick={handleEditMode}>Edit</Button>;
+    } else if (inUserList && editMode) {
+      return <Button onClick={console.log('Update!')}>Update</Button>;
+    }
+  };
+  const handleRating = (rate) => {
+    setRating(rate);
+
+    // other logic
   };
 
   return (
@@ -127,11 +148,7 @@ const NovelModal = (props) => {
             <Row>
               <Col xs={3}></Col>
               <Col xs={6}>
-                <div className='d-flex justify-content-around mb-3'>
-                  <Button className='my-2' onClick={toggleReadList}>
-                    Add to Read List
-                  </Button>
-                </div>
+                <div className='d-flex justify-content-around mb-3'></div>
               </Col>
               <Col xs={3}></Col>
             </Row>
@@ -167,24 +184,19 @@ const NovelModal = (props) => {
                 )}
               </Col>
             </Row>
-
-            {inUserList && (
+            {user && (
               <>
                 <h4 className=' d-flex justify-content-center mt-5 mb-0'>
-                  Rate this book and record some notes...
+                  Add to My List...
                 </h4>
                 <Row>
                   <Form>
                     <Form.Group className='d-flex justify-content-center'>
-                      <ReactStars
-                        name='rating'
-                        value={recordForm.rating}
-                        count={5}
-                        onChange={handleRatingChange}
-                        size={50}
-                        isHalf={true}
-                        activeColor='#ffd700'
-                        edit={!disableForm}
+                      <Rating
+                        onClick={handleRating}
+                        readonly={disableForm}
+                        allowFraction={true}
+                        initialValue={recordForm.rating}
                       />
                     </Form.Group>
                     <Form.Group className='mb-3'>
@@ -199,7 +211,7 @@ const NovelModal = (props) => {
                       />
                     </Form.Group>
                     <Form.Group className='mb-3'>
-                      <Button onClick={handleRecordSubmit}>Save</Button>
+                      {renderListButton()}
                     </Form.Group>
                   </Form>
                 </Row>

@@ -10,6 +10,7 @@ import {
   DELETE_RECORD,
   CLEAR_RECORDS,
   SET_LOADING,
+  CLEAR_AUTOCOMPLETE_RESULTS,
 } from '../types';
 
 const NovelsReducer = (state, action) => {
@@ -18,6 +19,11 @@ const NovelsReducer = (state, action) => {
       return {
         ...state,
         autoCompleteResults: action.payload,
+      };
+    case CLEAR_AUTOCOMPLETE_RESULTS:
+      return {
+        ...state,
+        autoCompleteResults: null,
       };
     case SET_SELECTED_NOVEL:
       return {
@@ -40,7 +46,6 @@ const NovelsReducer = (state, action) => {
         awards: null,
       };
     case CREATE_RECORD:
-      console.log('create record, about to set new records and loading: false');
       return {
         ...state,
         records: [action.payload, ...state.records],

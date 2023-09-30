@@ -6,7 +6,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 
 import Search from '../components/Search';
-import ReadList from '../components/ReadList';
+import MyList from '../components/MyList';
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -16,9 +16,7 @@ const Dashboard = () => {
   const { records, loading } = novelsState;
 
   useEffect(() => {
-    if (!user) {
-      navigate('/login');
-    } else {
+    if (user) {
       if (!records) {
         getRecords(novelsDispatch, user.token);
       }
@@ -41,9 +39,11 @@ const Dashboard = () => {
           <Tab eventKey='search' title='Search'>
             <Search />
           </Tab>
-          <Tab eventKey='myList' title='My List'>
-            <ReadList />
-          </Tab>
+          {user && (
+            <Tab eventKey='myList' title='My List'>
+              <MyList />
+            </Tab>
+          )}
         </Tabs>
       )}
     </>

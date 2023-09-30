@@ -1,7 +1,11 @@
 import { useState, useEffect } from 'react';
 import { useNovels } from '../context/novels/NovelsState';
-import { getAutoComplete } from '../context/novels/NovelsState';
-import Results from './Results';
+import {
+  getAutoComplete,
+  clearAutoComplete,
+} from '../context/novels/NovelsState';
+// import Results from './Results';
+import ListNovels from './ListNovels';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
 import Row from 'react-bootstrap/Row';
@@ -16,6 +20,7 @@ const Search = () => {
 
   useEffect(() => {
     searchBarText.length > 2 && getAutoComplete(novelsDispatch, searchBarText);
+    searchBarText.length === 0 && clearAutoComplete(novelsDispatch);
   }, [searchBarText, novelsDispatch]);
 
   return (
@@ -42,7 +47,7 @@ const Search = () => {
       </div>
 
       {autoCompleteResults !== null && autoCompleteResults.length > 0 && (
-        <Results results={autoCompleteResults} />
+        <ListNovels novelList={autoCompleteResults} />
       )}
     </>
   );
