@@ -87,6 +87,7 @@ export const createRecord = async (dispatch, data) => {
       },
     };
     const res = await axios.post('/api/records/', recordData, config);
+    console.log(res.data.record);
     dispatch({
       type: CREATE_RECORD,
       payload: res.data.record,
@@ -115,6 +116,64 @@ export const getRecords = async (dispatch, token) => {
     });
   } catch (err) {
     console.log('Error in NovelState getRecords:');
+    console.log(err);
+    // dispatch({
+    //   type: CONTACT_ERROR,
+    //   payload: err.response.msg
+    // });
+  }
+};
+
+export const updateRecord = async (dispatch, data) => {
+  const { recordData, token } = data;
+
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    // TODO: Its seems silly to send data along via URL that is getting sent along in a data object anyway. Can be improved?
+    const res = await axios.put(
+      '/api/records/' + recordData._id,
+      recordData,
+      config
+    );
+    if (res.data.result) {
+      dispatch({
+        type: UPDATE_RECORD,
+        payload: recordData,
+      });
+    }
+  } catch (err) {
+    console.log('Error in NovelState updateRecord:');
+    console.log(err);
+    // dispatch({
+    //   type: CONTACT_ERROR,
+    //   payload: err.response.msg
+    // });
+  }
+};
+
+export const deleteRecord = async (dispatch, data) => {
+  const { id, token } = data;
+
+  try {
+    const config = {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    };
+    const res = await axios.delete('/api/records/' + id, config);
+
+    if (res.data.result) {
+      dispatch({
+        type: DELETE_RECORD,
+        payload: id,
+      });
+    }
+  } catch (err) {
+    console.log('Error in NovelState deleteRecord:');
     console.log(err);
     // dispatch({
     //   type: CONTACT_ERROR,

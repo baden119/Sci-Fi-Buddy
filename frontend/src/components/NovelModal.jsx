@@ -4,6 +4,8 @@ import {
   useNovels,
   getAwards,
   createRecord,
+  updateRecord,
+  deleteRecord,
   clearSelectedNovel,
   clearAwards,
   setLoading,
@@ -34,15 +36,14 @@ const NovelModal = (props) => {
   // Initialise Component level state
   const [disableForm, setDisableForm] = useState(false);
   const [show, setShow] = useState(false);
-  const [inUserList, setInUserList] = useState(false);
-  const [editMode, setEditMode] = useState(false);
   const [recordForm, setRecordForm] = useState({
     list: 'read',
     rating: null,
     notes: '',
   });
 
-  const [rating, setRating] = useState(0);
+  const [inUserList, setInUserList] = useState(false);
+  const [editMode, setEditMode] = useState(false);
 
   // Handles displaying modal
   useEffect(() => {
@@ -56,7 +57,7 @@ const NovelModal = (props) => {
     }
   }, [selectedNovel, novelsDispatch]);
 
-  // Handles finding user records on selected  novel
+  // Handles finding user records on selected novel
   useEffect(() => {
     if (selectedNovel && records) {
       const record = records.find(
@@ -66,6 +67,7 @@ const NovelModal = (props) => {
       if (record) {
         setInUserList(true);
         setRecordForm({
+          _id: record._id,
           list: record.list,
           rating: record.rating,
           notes: record.notes,
@@ -75,6 +77,7 @@ const NovelModal = (props) => {
     }
   }, [records, selectedNovel]);
 
+  // Handles hiding the modal and resetting state values
   const handleClose = () => {
     clearSelectedNovel(novelsDispatch);
     clearAwards(novelsDispatch);
@@ -85,6 +88,7 @@ const NovelModal = (props) => {
     });
     setInUserList(false);
     setDisableForm(false);
+    setEditMode(false);
     handleHideModal();
   };
 
@@ -109,10 +113,25 @@ const NovelModal = (props) => {
       token: user.token,
     };
     data.recordData.novel_id = selectedNovel._id;
-    createRecord(novelsDispatch, data);
-    clearAutoComplete(novelsDispatch);
+    if (editMode) {
+      updateRecord(novelsDispatch, data);
+      console.log('TOAST: Record Updated');
+    } else {
+      createRecord(novelsDispatch, data);
+      console.log('TOAST: Record Created');
+      // clearAutoComplete(novelsDispatch);
+    }
     handleClose();
-    console.log('TOAST: Record Created');
+  };
+
+  const handleRecordDelete = () => {
+    const data = {
+      id: recordForm._id,
+      token: user.token,
+    };
+    console.log('delete record');
+    deleteRecord(novelsDispatch, data);
+    handleClose();
   };
 
   const handleEditMode = () => {
@@ -120,19 +139,59 @@ const NovelModal = (props) => {
     setDisableForm(false);
   };
 
-  const renderListButton = () => {
-    if (!inUserList) {
-      return <Button onClick={handleRecordSubmit}>Save</Button>;
-    } else if (inUserList && !editMode) {
-      return <Button onClick={handleEditMode}>Edit</Button>;
-    } else if (inUserList && editMode) {
-      return <Button onClick={console.log('Update!')}>Update</Button>;
+  const handleCancelEdit = () => {
+    setEditMode(false);
+    setDisableForm(true);
+    const record = records.find(
+      (record) => record.novel_id === selectedNovel._id
+    );
+
+    if (record) {
+      setRecordForm({
+        _id: record._id,
+        list: record.list,
+        rating: record.rating,
+        notes: record.notes,
+      });
     }
   };
-  const handleRating = (rate) => {
-    setRating(rate);
 
-    // other logic
+  const renderListButton = () => {
+    if (!inUserList) {
+      return (
+        <div className='d-grid gap-2'>
+          <Button onClick={handleRecordSubmit}>Save</Button>
+        </div>
+      );
+    } else if (inUserList && !editMode) {
+      return (
+        <Row className='d-flex justify-space-between'>
+          <Col className='d-grid gap-2'>
+            <Button variant='info' onClick={handleEditMode}>
+              Edit
+            </Button>
+          </Col>
+          <Col className='d-grid gap-2'>
+            <Button variant='warning' onClick={handleRecordDelete}>
+              Delete
+            </Button>
+          </Col>
+        </Row>
+      );
+    } else if (inUserList && editMode) {
+      return (
+        <Row className='d-flex justify-space-between'>
+          <Col className='d-grid gap-2'>
+            <Button onClick={handleRecordSubmit}>Update</Button>
+          </Col>
+          <Col className='d-grid gap-2'>
+            <Button variant='secondary' onClick={handleCancelEdit}>
+              Cancel
+            </Button>
+          </Col>
+        </Row>
+      );
+    }
   };
 
   return (
@@ -141,7 +200,8 @@ const NovelModal = (props) => {
         <Modal size='lg' show={show} onHide={handleClose}>
           <Modal.Header id='novelModalHeader' closeButton>
             <Modal.Title>
-              {selectedNovel.title} by {selectedNovel.author}
+              <div className='fw-bold'>{selectedNovel.title}</div>
+              {selectedNovel.author}
             </Modal.Title>
           </Modal.Header>
           <Modal.Body id='novelModalBody'>
@@ -193,7 +253,7 @@ const NovelModal = (props) => {
                   <Form>
                     <Form.Group className='d-flex justify-content-center'>
                       <Rating
-                        onClick={handleRating}
+                        onClick={handleRatingChange}
                         readonly={disableForm}
                         allowFraction={true}
                         initialValue={recordForm.rating}

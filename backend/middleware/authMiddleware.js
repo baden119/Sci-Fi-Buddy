@@ -26,7 +26,6 @@ const protect = asyncHandler(async (req, res, next) => {
       // We've sent the ID along in the generateToken function of the userController file.
 
       req.user = await findUserByID(decoded.id, collection);
-
       next();
     } catch (error) {
       console.log(error);

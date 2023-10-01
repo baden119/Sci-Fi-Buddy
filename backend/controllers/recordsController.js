@@ -31,7 +31,8 @@ const createRecord = asyncHandler(async (req, res) => {
 
   try {
     let result = await collection.insertOne(record);
-    record._id = result.insertedID;
+    // This code didnt work for a good half hour, then started working...
+    record._id = result.insertedId;
     res.status(200).json({ record });
   } catch (err) {
     console.error(
@@ -67,55 +68,124 @@ const readRecord = asyncHandler(async (req, res) => {
 // @route   PUT /api/record/:id
 // @access   Private
 const updateRecord = asyncHandler(async (req, res) => {
-  // Find Record (req.params.id)
-  // Find User (req.user.id)
+  // Pull connection client into module
+  const client = req.app.locals.client;
 
-  //   if (!record) {
-  //     res.status(400);
-  //     throw new Error('Record not Found');
-  //   }
+  // Check record and user exist
+  const record = await findRecord(client, req.params.id);
+  const user = await findUser(client, req.user._id);
 
-  //   if (!user) {
-  //     res.status(401);
-  //     throw new Error('User not Found');
-  //   }
+  if (!record) {
+    res.status(400);
+    throw new Error('Record not Found');
+  }
 
-  // Make sure the logged in user matches the record user
-  //   if (record.user.toString() !== req.user.id) {
-  //     res.status(401);
-  //     throw new Error('User not authorized');
-  //   }
+  if (!user) {
+    res.status(401);
+    throw new Error('User not Found');
+  }
 
-  // Update Record (findByIdAndUpdate(req.params.id, req.body)
-  res.status(200).json({ message: 'Update Record Route' });
+  // // Make sure the logged in user matches the record user
+  if (record.user_id.toString() !== req.user._id.toString()) {
+    res.status(401);
+    throw new Error('User not authorized');
+  }
+
+  // Specify Database and Collection for record update
+  const db = client.db('Buddy-Data');
+  const collection = db.collection('Records');
+
+  // Set up update request paramaters
+  const recordToUpdate = { _id: record._id };
+  const update = {
+    $set: {
+      rating: req.body.rating,
+      notes: req.body.notes,
+    },
+  };
+
+  // Run update in DB
+  try {
+    let result = await collection.updateOne(recordToUpdate, update);
+    res.status(200).json({ result: result.acknowledged });
+  } catch (error) {
+    console.error(`Error updating record: ${error}`);
+  }
 });
 
 // @desc    Delete Record
 // @route   DELETE /api/record/:id
 // @access   Private
 const deleteRecord = asyncHandler(async (req, res) => {
-  // Find Record (req.params.id)
-  // Find User (req.user.id)
+  // Pull connection client into module
+  const client = req.app.locals.client;
 
-  //   if (!record) {
-  //     res.status(400);
-  //     throw new Error('Record not Found');
-  //   }
+  // Check record and user exist
+  const record = await findRecord(client, req.params.id);
+  const user = await findUser(client, req.user._id);
 
-  //   if (!user) {
-  //     res.status(401);
-  //     throw new Error('User not Found');
-  //   }
+  if (!record) {
+    res.status(400);
+    throw new Error('Record not Found');
+  }
 
-  // Make sure the logged in user matches the record user
-  //   if (record.user.toString() !== req.user.id) {
-  //     res.status(401);
-  //     throw new Error('User not authorized');
-  //   }
+  if (!user) {
+    res.status(401);
+    throw new Error('User not Found');
+  }
 
-  // Delete Record (deleteOne();)
-  res.status(200).json({ message: 'Update Delete Route' });
+  // // Make sure the logged in user matches the record user
+  if (record.user_id.toString() !== req.user._id.toString()) {
+    res.status(401);
+    throw new Error('User not authorized');
+  }
+
+  // Specify Database and Collection for record to be deleted
+  const db = client.db('Buddy-Data');
+  const collection = db.collection('Records');
+  const recordToDelete = { _id: record._id };
+
+  // Delete from DB
+  try {
+    let result = await collection.deleteOne(recordToDelete);
+    res.status(200).json({ result: result.acknowledged });
+  } catch (error) {
+    console.error(`Error updating record: ${error}`);
+  }
 });
+
+const findUser = async (client, _id) => {
+  // Specify Database and Collection for finding user
+  const db = client.db('Auth');
+  const collection = db.collection('Users');
+
+  // Find and return user
+  try {
+    let user = await collection.findOne(
+      { _id },
+      { projection: { password: 0 } }
+    );
+    return user;
+  } catch (error) {
+    console.log('error in recordsController findUser function');
+    console.log(error);
+  }
+};
+
+const findRecord = async (client, id) => {
+  // Specify Database and Collection for finding record
+  const db = client.db('Buddy-Data');
+  const collection = db.collection('Records');
+
+  // Find and return record
+  try {
+    let record = await collection.findOne({ _id: new ObjectId(id) });
+    return record;
+  } catch (error) {
+    console.log('error in recordsController findRecord function');
+    console.log(error);
+  }
+};
 
 module.exports = {
   readRecord,

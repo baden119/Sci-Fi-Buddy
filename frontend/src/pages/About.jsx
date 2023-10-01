@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import axios from 'axios';
-const appVersion = 'dev01';
+const appVersion = 'dev02';
 
 const About = () => {
   const [serverVersion, setServerVersion] = useState(null);

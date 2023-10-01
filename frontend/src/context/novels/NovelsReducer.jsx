@@ -51,11 +51,25 @@ const NovelsReducer = (state, action) => {
         records: [action.payload, ...state.records],
         loading: false,
       };
-
     case READ_RECORDS:
       return {
         ...state,
         records: action.payload,
+      };
+    case UPDATE_RECORD:
+      return {
+        ...state,
+        records: state.records.map((record) =>
+          record._id === action.payload._id ? action.payload : record
+        ),
+        loading: false,
+      };
+    case DELETE_RECORD:
+      return {
+        ...state,
+        records: state.records.filter(
+          (record) => record._id !== action.payload
+        ),
       };
     case CLEAR_RECORDS:
       return {

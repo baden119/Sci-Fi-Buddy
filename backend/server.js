@@ -5,7 +5,7 @@ const cors = require('cors');
 const dotenv = require('dotenv').config();
 const { errorHandler } = require('./middleware/errorMiddleware');
 const port = process.env.PORT || 5000;
-const version = 'dev01';
+const version = 'dev02';
 
 const uri = process.env.MONGO_URI;
 
