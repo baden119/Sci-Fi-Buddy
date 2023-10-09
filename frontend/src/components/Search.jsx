@@ -1,10 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useEffect } from 'react';
 import { useNovels } from '../context/novels/NovelsState';
 import {
   getAutoComplete,
   clearAutoComplete,
+  setSearchBarText,
 } from '../context/novels/NovelsState';
-// import Results from './Results';
 import ListNovels from './ListNovels';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -14,14 +14,23 @@ import Col from 'react-bootstrap/Col';
 const Search = () => {
   const [novelsState, novelsDispatch] = useNovels();
 
-  const { autoCompleteResults } = novelsState;
+  const { autoCompleteResults, searchBarText } = novelsState;
 
-  const [searchBarText, setSearchBarText] = useState('');
-
+  // Handles search bar behaviour, searches when inputs reach certain length, clears when empty.
   useEffect(() => {
     searchBarText.length > 2 && getAutoComplete(novelsDispatch, searchBarText);
     searchBarText.length === 0 && clearAutoComplete(novelsDispatch);
   }, [searchBarText, novelsDispatch]);
+
+  const renderResults = () => {
+    if (!autoCompleteResults) {
+      return <h1>Search for authors or titles...</h1>;
+    } else if (autoCompleteResults && autoCompleteResults.length > 0) {
+      return <ListNovels novelList={autoCompleteResults} />;
+    } else if (autoCompleteResults && searchBarText.length > 2) {
+      return <h1>No results found...</h1>;
+    }
+  };
 
   return (
     <>
@@ -29,26 +38,24 @@ const Search = () => {
         <Row>
           <Col md={3}></Col>
           <Col md={6}>
-            <Form autoComplete='off'>
-              <InputGroup>
-                <Form.Control
-                  placeholder='Search titles or authors...'
-                  type='text'
-                  size='lg'
-                  name='text'
-                  value={searchBarText}
-                  onChange={(e) => setSearchBarText(e.target.value)}
-                />
-              </InputGroup>
-            </Form>
+            <InputGroup>
+              <Form.Control
+                placeholder='Search titles or authors...'
+                type='text'
+                size='lg'
+                name='text'
+                value={searchBarText}
+                onChange={(e) =>
+                  setSearchBarText(novelsDispatch, e.target.value)
+                }
+                autoComplete='off'
+              />
+            </InputGroup>
           </Col>
           <Col md={3}></Col>
         </Row>
       </div>
-
-      {autoCompleteResults !== null && autoCompleteResults.length > 0 && (
-        <ListNovels novelList={autoCompleteResults} />
-      )}
+      {renderResults()}
     </>
   );
 };

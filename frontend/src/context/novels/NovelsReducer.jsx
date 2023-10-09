@@ -11,10 +11,18 @@ import {
   CLEAR_RECORDS,
   SET_LOADING,
   CLEAR_AUTOCOMPLETE_RESULTS,
+  SET_SEARCHBAR_TEXT,
+  NOVEL_ERROR,
+  CLEAR_ERRORS,
 } from '../types';
 
 const NovelsReducer = (state, action) => {
   switch (action.type) {
+    case SET_SEARCHBAR_TEXT:
+      return {
+        ...state,
+        searchBarText: action.payload,
+      };
     case SET_AUTOCOMPLETE_RESULTS:
       return {
         ...state,
@@ -81,6 +89,13 @@ const NovelsReducer = (state, action) => {
         ...state,
         loading: true,
       };
+    case NOVEL_ERROR:
+      return {
+        ...state,
+        novelError: action.payload,
+      };
+    case CLEAR_ERRORS:
+      return { ...state, novelError: null };
 
     default:
       return state;

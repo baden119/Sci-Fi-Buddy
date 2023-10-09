@@ -15,8 +15,6 @@ const createRecord = asyncHandler(async (req, res) => {
     throw new Error('Novel ID Data Missing');
   }
 
-  // TODO Check for existing record (userid + novelid)
-
   // Create Record In DB
   const { novel_id, list, rating, notes } = req.body;
 
@@ -41,12 +39,10 @@ const createRecord = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Read Record
+// @desc    Read all of a users records
 // @route   GET /api/record
 // @access   Private
 const readRecord = asyncHandler(async (req, res) => {
-  // Read Record from DB
-
   // Pull connection client into module and specify Database and Collection
   const client = req.app.locals.client;
   const db = client.db('Buddy-Data');

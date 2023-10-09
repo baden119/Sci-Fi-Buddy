@@ -9,7 +9,6 @@ import {
   clearSelectedNovel,
   clearAwards,
   setLoading,
-  clearAutoComplete,
 } from '../context/novels/NovelsState';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
@@ -20,6 +19,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import ListGroup from 'react-bootstrap/ListGroup';
 import Image from 'react-bootstrap/Image';
+import { toast } from 'react-toastify';
 import { FaTrophy } from 'react-icons/fa';
 import { FaMedal } from 'react-icons/fa';
 
@@ -30,7 +30,8 @@ const NovelModal = (props) => {
   // Initialise and destructure App level state
   const [novelsState, novelsDispatch] = useNovels();
   const { selectedNovel, awards, records } = novelsState;
-  const [authState, authDispatch] = useAuth();
+  // destructure auth state without the dispatch
+  const authState = useAuth()[0];
   const { user } = authState;
 
   // Initialise Component level state
@@ -115,11 +116,10 @@ const NovelModal = (props) => {
     data.recordData.novel_id = selectedNovel._id;
     if (editMode) {
       updateRecord(novelsDispatch, data);
-      console.log('TOAST: Record Updated');
+      toast.success('Record successfully updated');
     } else {
       createRecord(novelsDispatch, data);
-      console.log('TOAST: Record Created');
-      // clearAutoComplete(novelsDispatch);
+      toast.success('Record successfully created');
     }
     handleClose();
   };
@@ -129,8 +129,8 @@ const NovelModal = (props) => {
       id: recordForm._id,
       token: user.token,
     };
-    console.log('delete record');
     deleteRecord(novelsDispatch, data);
+    toast.info('Record deleted');
     handleClose();
   };
 

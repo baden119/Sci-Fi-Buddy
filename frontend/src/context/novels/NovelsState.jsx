@@ -4,6 +4,7 @@ import novelsReducer from './NovelsReducer';
 import axios from 'axios';
 
 import {
+  SET_SEARCHBAR_TEXT,
   SET_AUTOCOMPLETE_RESULTS,
   SET_SELECTED_NOVEL,
   CLEAR_SELECTED_NOVEL,
@@ -16,12 +17,22 @@ import {
   CLEAR_RECORDS,
   SET_LOADING,
   CLEAR_AUTOCOMPLETE_RESULTS,
+  NOVEL_ERROR,
+  CLEAR_ERRORS,
 } from '../types';
 
 // Create a custom hook to use the novels context
 export const useNovels = () => {
   const { state, dispatch } = useContext(NovelsContext);
   return [state, dispatch];
+};
+
+// Set Searchbar state value
+export const setSearchBarText = (dispatch, input) => {
+  dispatch({
+    type: SET_SEARCHBAR_TEXT,
+    payload: input,
+  });
 };
 
 // Autocomplete search inputs
@@ -87,7 +98,7 @@ export const createRecord = async (dispatch, data) => {
       },
     };
     const res = await axios.post('/api/records/', recordData, config);
-    console.log(res.data.record);
+    console.log(res.data);
     dispatch({
       type: CREATE_RECORD,
       payload: res.data.record,
@@ -95,10 +106,10 @@ export const createRecord = async (dispatch, data) => {
   } catch (err) {
     console.log('Error in NovelState createRecord:');
     console.log(err);
-    // dispatch({
-    //   type: CONTACT_ERROR,
-    //   payload: err.response.msg
-    // });
+    dispatch({
+      type: NOVEL_ERROR,
+      payload: err.response.data.message,
+    });
   }
 };
 
@@ -117,10 +128,10 @@ export const getRecords = async (dispatch, token) => {
   } catch (err) {
     console.log('Error in NovelState getRecords:');
     console.log(err);
-    // dispatch({
-    //   type: CONTACT_ERROR,
-    //   payload: err.response.msg
-    // });
+    dispatch({
+      type: NOVEL_ERROR,
+      payload: err.response.data.message,
+    });
   }
 };
 
@@ -148,10 +159,10 @@ export const updateRecord = async (dispatch, data) => {
   } catch (err) {
     console.log('Error in NovelState updateRecord:');
     console.log(err);
-    // dispatch({
-    //   type: CONTACT_ERROR,
-    //   payload: err.response.msg
-    // });
+    dispatch({
+      type: NOVEL_ERROR,
+      payload: err.response.data.message,
+    });
   }
 };
 
@@ -175,10 +186,10 @@ export const deleteRecord = async (dispatch, data) => {
   } catch (err) {
     console.log('Error in NovelState deleteRecord:');
     console.log(err);
-    // dispatch({
-    //   type: CONTACT_ERROR,
-    //   payload: err.response.msg
-    // });
+    dispatch({
+      type: NOVEL_ERROR,
+      payload: err.response.data.message,
+    });
   }
 };
 
@@ -195,13 +206,20 @@ export const setLoading = (dispatch) => {
   });
 };
 
+// Clear Auth Errors
+export const clearNovelErrors = (dispatch) => {
+  dispatch({ type: CLEAR_ERRORS });
+};
+
 const NovelsState = (props) => {
   const initialState = {
+    searchBarText: '',
     autoCompleteResults: [],
     selectedNovel: null,
     awards: null,
     records: null,
     loading: false,
+    novelError: null,
   };
 
   const [state, dispatch] = useReducer(novelsReducer, initialState);

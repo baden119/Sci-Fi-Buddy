@@ -1,52 +1,83 @@
 import { useEffect, useState } from 'react';
+import axios from 'axios';
 import { useAuth } from '../context/auth/AuthState';
-import { getRecords, useNovels } from '../context/novels/NovelsState';
+import {
+  getRecords,
+  useNovels,
+  clearNovelErrors,
+} from '../context/novels/NovelsState';
+import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
 import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
+import Badge from 'react-bootstrap/Badge';
 
 import Search from '../components/Search';
 import MyList from '../components/MyList';
 
 const Dashboard = () => {
+  const [serverConnect, setServerConnect] = useState(false);
+
   const navigate = useNavigate();
-  const [authState, authDispatch] = useAuth();
-  const { user } = authState;
+
+  // Initialise and destructure App level state
   const [novelsState, novelsDispatch] = useNovels();
-  const { records, loading } = novelsState;
+  const { records, loading, novelError } = novelsState;
+  // destructure auth state without the dispatch
+  const authState = useAuth()[0];
+  const { user } = authState;
 
   useEffect(() => {
+    async function getServerVersion() {
+      const connected = await axios.get('api/version');
+      connected && setServerConnect(true);
+    }
+
+    getServerVersion();
+  }, []);
+
+  useEffect(() => {
+    if (novelError) {
+      toast.error(novelError);
+      clearNovelErrors(novelsDispatch);
+    }
+
     if (user) {
       if (!records) {
         getRecords(novelsDispatch, user.token);
       }
     }
-  }, [user, navigate, novelsDispatch, records]);
+  }, [user, navigate, novelsDispatch, records, novelError]);
 
-  return (
-    <>
-      {loading ? (
-        <span className='loader'></span>
-      ) : (
-        <Tabs
-          defaultActiveKey='search'
-          id='uncontrolled-tab-example'
-          className='mb-3'
-        >
-          {/* <Tab eventKey='browse' title='Browse'>
-          Browse or something i guess?
-        </Tab> */}
-          <Tab eventKey='search' title='Search'>
-            <Search />
+  if (!serverConnect) {
+    return <h1> Waiting for server</h1>;
+  } else if (serverConnect && loading) {
+    return <span className='loader'></span>;
+  } else {
+    return (
+      <Tabs
+        defaultActiveKey='search'
+        id='uncontrolled-tab-example'
+        className='mb-3'
+      >
+        <Tab eventKey='search' title='Search'>
+          <Search />
+        </Tab>
+        {user && (
+          <Tab
+            eventKey='myList'
+            title={
+              <>
+                My List{' '}
+                {records && <Badge bg='primary'>{records.length}</Badge>}
+              </>
+            }
+          >
+            <MyList />
           </Tab>
-          {user && (
-            <Tab eventKey='myList' title='My List'>
-              <MyList />
-            </Tab>
-          )}
-        </Tabs>
-      )}
-    </>
-  );
+        )}
+      </Tabs>
+    );
+  }
 };
 export default Dashboard;

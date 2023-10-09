@@ -5,6 +5,15 @@ const { ObjectId } = require('mongodb');
 // @route   POST /api/search/autocomplete
 // @access  Public
 
+/*
+Novel and Author database search leverages MongoDB Atlas Search Autocomplete functionality.
+https://www.mongodb.com/docs/atlas/atlas-search/autocomplete/
+https://www.mongodb.com/docs/atlas/atlas-search/tutorial/autocomplete-tutorial/
+
+- The 'author' and 'title' fields of the 'Novel' collection have been indexed for autocompletion.
+- Search querys are recieved from the frontend and passed through the 'aggregation pipeline' which searches for matches in either field.
+- 'Fuzzy' search is included to accomodate input errors.
+*/
 const autocomplete = asyncHandler(async (req, res) => {
   // Pull connection client into module and specify Database and Collection
   const client = req.app.locals.client;
@@ -58,6 +67,12 @@ const autocomplete = asyncHandler(async (req, res) => {
     console.error(`Error in Autocorrect Route ${err}`);
   }
 });
+
+// @desc    Returns data on novels from an array of ID's
+// @route   POST /api/search/array
+// @access  Public
+
+// array api request sent directly from frontend MyList component rather than via Contect API NovelState
 
 const array = asyncHandler(async (req, res) => {
   // Pull connection client into module and specify Database and Collection
