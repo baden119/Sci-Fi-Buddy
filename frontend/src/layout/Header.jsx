@@ -52,24 +52,23 @@ const Header = () => {
   );
 
   return (
-    <Navbar expand='lg' className='Sci-Fi-Buddy_Heading'>
+    <Navbar expand='sm' className='Sci-Fi-Buddy_Heading'>
       <Container>
         <LinkContainer to='/'>
           <Navbar.Brand className='brandText'>
             <BsRobot />
             Sci-Fi Buddy
-            <GiAlienStare />
           </Navbar.Brand>
         </LinkContainer>
-        <Navbar.Toggle aria-controls='basic-navbar-nav' />
-        <Navbar.Collapse className='justify-content-end'>
+        {/* <Navbar.Toggle aria-controls='basic-navbar-nav' /> */}
+        <Navbar className='justify-content-end'>
           {user ? authLinks : guestLinks}
-          <LinkContainer to='/about' className='mx-2'>
+          <LinkContainer to='/about'>
             <Nav.Link>
               <FaCentos /> About
             </Nav.Link>
           </LinkContainer>
-        </Navbar.Collapse>
+        </Navbar>
       </Container>
     </Navbar>
   );
