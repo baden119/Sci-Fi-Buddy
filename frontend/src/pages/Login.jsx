@@ -78,7 +78,7 @@ const Login = () => {
             </Form.Group>
 
             <Form.Group className='d-grid gap-2'>
-              <Button variant='secondary' type='submit'>
+              <Button variant='danger' type='submit'>
                 Login
               </Button>
             </Form.Group>

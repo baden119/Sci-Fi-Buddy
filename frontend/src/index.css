@@ -29,17 +29,22 @@ body {
 }
 
 .heading p {
-  color: #bdfdcd;
+  color: #ff492f;
 }
+
+/* .Sci-Fi-Buddy_Tabs {
+  background-color: #ffe28c;
+} */
 
 .nav-tabs .nav-link {
   background-color: transparent !important;
-  color: #ffffff !important;
+  color: black !important;
 }
 
 .nav-tabs .nav-link.active {
   background-color: #ff9617 !important;
-  border-bottom: solid 4px white !important;
+  border-bottom: solid 4px #ff492f !important;
+  color: white;
 }
 
 .winner-list-item {

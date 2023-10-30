@@ -105,7 +105,7 @@ const Register = () => {
               </Form.Group>
 
               <Form.Group className='d-grid gap-2'>
-                <Button variant='secondary' type='submit'>
+                <Button variant='danger' type='submit'>
                   Register
                 </Button>
               </Form.Group>

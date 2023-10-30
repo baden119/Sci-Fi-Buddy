@@ -56,7 +56,7 @@ const Dashboard = () => {
     return <span className='loader'></span>;
   } else {
     return (
-      <Tabs defaultActiveKey='search' className='Sci-Fi-Buddy_Tabs mb-3 mx-2'>
+      <Tabs defaultActiveKey='search' className='Sci-Fi-Buddy_Tabs mb-3'>
         <Tab eventKey='search' title='Search'>
           <Search />
         </Tab>
