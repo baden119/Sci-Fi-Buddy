@@ -160,7 +160,9 @@ const NovelModal = (props) => {
     if (!inUserList) {
       return (
         <div className='d-grid gap-2'>
-          <Button onClick={handleRecordSubmit}>Save</Button>
+          <Button variant='info' onClick={handleRecordSubmit}>
+            Save
+          </Button>
         </div>
       );
     } else if (inUserList && !editMode) {
@@ -230,7 +232,14 @@ const NovelModal = (props) => {
                   <ListGroup>
                     {awards.map((award) => {
                       return (
-                        <ListGroup.Item key={award._id}>
+                        <ListGroup.Item
+                          key={award._id}
+                          className={
+                            award.winner
+                              ? 'winner-list-item'
+                              : 'nominated-list-item'
+                          }
+                        >
                           <span className='mx-2'>
                             {award.winner ? <FaTrophy /> : <FaMedal />}
                           </span>

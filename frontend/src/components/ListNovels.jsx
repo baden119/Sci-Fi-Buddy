@@ -53,6 +53,8 @@ const ListNovels = (props) => {
           const record = getRecords(novel._id);
           return (
             <ListGroup.Item
+              // className='listItem'
+              variant='warning'
               key={novel._id}
               value={novel._id}
               onClick={handleNovelSelect}

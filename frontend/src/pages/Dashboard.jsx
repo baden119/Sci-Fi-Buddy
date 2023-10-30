@@ -56,11 +56,7 @@ const Dashboard = () => {
     return <span className='loader'></span>;
   } else {
     return (
-      <Tabs
-        defaultActiveKey='search'
-        id='uncontrolled-tab-example'
-        className='mb-3'
-      >
+      <Tabs defaultActiveKey='search' className='Sci-Fi-Buddy_Tabs mb-3 mx-2'>
         <Tab eventKey='search' title='Search'>
           <Search />
         </Tab>
@@ -69,8 +65,12 @@ const Dashboard = () => {
             eventKey='myList'
             title={
               <>
-                My List{' '}
-                {records && <Badge bg='primary'>{records.length}</Badge>}
+                My List
+                {records && (
+                  <Badge bg='danger' className='mx-2'>
+                    {records.length}
+                  </Badge>
+                )}
               </>
             }
           >

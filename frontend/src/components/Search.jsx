@@ -24,11 +24,19 @@ const Search = () => {
 
   const renderResults = () => {
     if (!autoCompleteResults) {
-      return <h1>Search for authors or titles...</h1>;
+      return (
+        <div style={{ textAlign: 'center' }}>
+          <h1>Search for authors or titles...</h1>
+        </div>
+      );
     } else if (autoCompleteResults && autoCompleteResults.length > 0) {
       return <ListNovels novelList={autoCompleteResults} />;
     } else if (autoCompleteResults && searchBarText.length > 2) {
-      return <h1>No results found...</h1>;
+      return (
+        <div style={{ textAlign: 'center' }}>
+          <h1>No results found...</h1>
+        </div>
+      );
     }
   };
 
@@ -40,11 +48,12 @@ const Search = () => {
           <Col md={6}>
             <InputGroup>
               <Form.Control
-                placeholder='Search titles or authors...'
+                placeholder='🔎'
                 type='text'
                 size='lg'
                 name='text'
                 value={searchBarText}
+                className='Search-Bar'
                 onChange={(e) =>
                   setSearchBarText(novelsDispatch, e.target.value)
                 }

@@ -1,15 +1,15 @@
 @import url('https://fonts.googleapis.com/css2?family=Exo:wght@500&display=swap');
 
 body {
-  background-color: lightblue;
+  background-color: #ff9617;
 }
 
 .App {
-  background-color: rgb(121, 166, 177);
+  background-color: #ffce3f;
 }
 
 .Sci-Fi-Buddy_Heading {
-  background-color: rgb(158, 145, 145);
+  background-color: #ff492f;
 }
 
 .heading {
@@ -20,16 +20,41 @@ body {
   text-align: center;
 }
 
+.Search-Bar {
+  background-color: #ffe28c;
+}
+
+.listItem {
+  background-color: #ffe28c;
+}
+
 .heading p {
   color: #bdfdcd;
 }
 
+.nav-tabs .nav-link {
+  background-color: transparent !important;
+  color: #ffffff !important;
+}
+
+.nav-tabs .nav-link.active {
+  background-color: #ff9617 !important;
+  border-bottom: solid 4px white !important;
+}
+
+.winner-list-item {
+  background-color: gold;
+}
+
+.nominated-list-item {
+  background-color: rgb(206, 208, 175);
+}
 #novelModalHeader {
-  background-color: lightblue;
+  background-color: #ffe28c;
 }
 
 #novelModalBody {
-  background-color: lightblue;
+  background-color: #ffe28c;
 }
 
 .modalImage {
