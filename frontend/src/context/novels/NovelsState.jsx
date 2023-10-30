@@ -5,6 +5,7 @@ import axios from 'axios';
 
 import {
   SET_SEARCHBAR_TEXT,
+  CLEAR_SEARCHBAR_TEXT,
   SET_AUTOCOMPLETE_RESULTS,
   SET_SELECTED_NOVEL,
   CLEAR_SELECTED_NOVEL,
@@ -32,6 +33,12 @@ export const setSearchBarText = (dispatch, input) => {
   dispatch({
     type: SET_SEARCHBAR_TEXT,
     payload: input,
+  });
+};
+
+export const clearSearchBarText = (dispatch) => {
+  dispatch({
+    type: CLEAR_SEARCHBAR_TEXT,
   });
 };
 

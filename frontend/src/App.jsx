@@ -16,8 +16,8 @@ const App = () => {
       <AuthState>
         <NovelsState>
           <Router>
+            <Header />
             <Container className='App'>
-              <Header />
               <Routes>
                 <Route path='/' element={<Dashboard />} />
                 <Route path='/about' element={<About />} />

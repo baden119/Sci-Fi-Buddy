@@ -4,8 +4,8 @@ import axios from 'axios';
 import ListNovels from './ListNovels';
 
 const MyList = () => {
-  // Initialise and destructure App level state
-  const [novelsState, novelsDispatch] = useNovels();
+  // Destructure novels state without the dispatch
+  const novelsState = useNovels()[0];
   const { records } = novelsState;
   const [novelList, setNovelList] = useState([]);
 
@@ -34,7 +34,7 @@ const MyList = () => {
   if (Array.isArray(novelList) && novelList.length) {
     return <ListNovels novelList={novelList} />;
   } else {
-    return <div>Add Some Records, fool.</div>;
+    return <h2>Your list is empty, add some records!</h2>;
   }
 };
 export default MyList;

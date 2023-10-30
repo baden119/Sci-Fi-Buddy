@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import { useAuth } from '../context/auth/AuthState';
+import { useAuth, logout } from '../context/auth/AuthState';
 import {
   getRecords,
   useNovels,
@@ -40,6 +40,7 @@ const Dashboard = () => {
     if (novelError) {
       toast.error(novelError);
       clearNovelErrors(novelsDispatch);
+      logout();
     }
 
     if (user) {

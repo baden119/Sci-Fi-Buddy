@@ -14,6 +14,7 @@ import {
   SET_SEARCHBAR_TEXT,
   NOVEL_ERROR,
   CLEAR_ERRORS,
+  CLEAR_SEARCHBAR_TEXT,
 } from '../types';
 
 const NovelsReducer = (state, action) => {
@@ -22,6 +23,11 @@ const NovelsReducer = (state, action) => {
       return {
         ...state,
         searchBarText: action.payload,
+      };
+    case CLEAR_SEARCHBAR_TEXT:
+      return {
+        ...state,
+        searchBarText: '',
       };
     case SET_AUTOCOMPLETE_RESULTS:
       return {

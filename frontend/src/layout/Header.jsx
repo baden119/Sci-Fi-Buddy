@@ -4,6 +4,8 @@ import {
   clearSelectedNovel,
   clearAwards,
   clearRecords,
+  clearAutoComplete,
+  clearSearchBarText,
 } from '../context/novels/NovelsState';
 import {
   FaSignInAlt,
@@ -12,7 +14,6 @@ import {
   FaCentos,
 } from 'react-icons/fa';
 import { BsRobot } from 'react-icons/bs';
-import { GiAlienStare } from 'react-icons/gi';
 import { LinkContainer } from 'react-router-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -21,13 +22,17 @@ import Navbar from 'react-bootstrap/Navbar';
 const Header = () => {
   const [authState, authDispatch] = useAuth();
   const { user } = authState;
-  const [novelsState, novelsDispatch] = useNovels();
+
+  // destructure novels dispatch without state
+  const novelsDispatch = useNovels()[1];
 
   const logOut = () => {
     logout(authDispatch);
     clearSelectedNovel(novelsDispatch);
     clearAwards(novelsDispatch);
     clearRecords(novelsDispatch);
+    clearAutoComplete(novelsDispatch);
+    clearSearchBarText(novelsDispatch);
   };
 
   const authLinks = user && (
@@ -60,15 +65,15 @@ const Header = () => {
             Sci-Fi Buddy
           </Navbar.Brand>
         </LinkContainer>
-        {/* <Navbar.Toggle aria-controls='basic-navbar-nav' /> */}
-        <Navbar className='justify-content-end'>
+        <Navbar.Toggle aria-controls='basic-navbar-nav' />
+        <Navbar.Collapse className='justify-content-end'>
           {user ? authLinks : guestLinks}
-          <LinkContainer to='/about'>
+          <LinkContainer to='/about' className='mx-2'>
             <Nav.Link>
               <FaCentos /> About
             </Nav.Link>
           </LinkContainer>
-        </Navbar>
+        </Navbar.Collapse>
       </Container>
     </Navbar>
   );
