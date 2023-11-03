@@ -8,6 +8,10 @@ body {
   background-color: #ffce3f;
 }
 
+:root {
+  --toastify-color-success: #ffce3f;
+}
+
 .Sci-Fi-Buddy_Heading {
   background-color: #ff492f;
 }

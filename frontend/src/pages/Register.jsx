@@ -62,7 +62,7 @@ const Register = () => {
         <h1>
           <FaUserAstronaut /> Register
         </h1>
-        <p>Please create an account</p>
+        <p>Create an account</p>
       </section>
 
       <Container>
@@ -74,7 +74,6 @@ const Register = () => {
                 <Form.Control
                   required
                   type='text'
-                  // id='name'
                   name='name'
                   value={name}
                   placeholder='Choose a User Name'

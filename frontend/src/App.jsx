@@ -36,7 +36,7 @@ const App = () => {
             pauseOnFocusLoss
             draggable
             pauseOnHover
-            theme='colored'
+            theme='light'
           />
         </NovelsState>
       </AuthState>

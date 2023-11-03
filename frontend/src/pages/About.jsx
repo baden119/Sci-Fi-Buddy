@@ -18,7 +18,7 @@ const About = () => {
         </p>
         <p>
           Every novel in the Sci-Fi-Buddy database has either been nominated
-          for, or recieved one of the genres major awards. The award information{' '}
+          for, or received one of the genres major awards. The award information{' '}
           <a href='https://en.wikipedia.org/wiki/Hugo_Award_for_Best_Novel'>
             was gathered from Wikipedia
           </a>
