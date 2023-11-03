@@ -2,6 +2,11 @@ import Container from 'react-bootstrap/Container';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Image from 'react-bootstrap/Image';
+
+import GitHubLogo from '../assets/github-mark.png';
+import LinkedInLogo from '../assets/LI-Logo.png';
+import ResumeThumbnail from '../assets/resume-screenshot.png';
+
 const About = () => {
   return (
     <Container>
@@ -34,11 +39,7 @@ const About = () => {
             target='_blank'
             rel='noreferrer'
           >
-            <Image
-              src='../src/assets/github-mark.png'
-              thumbnail
-              className='aboutPageImage'
-            />
+            <Image src={GitHubLogo} thumbnail className='aboutPageImage' />
           </a>
           <h3> Sci-Fi-Buddy Github Repo</h3>
         </Col>
@@ -48,11 +49,7 @@ const About = () => {
             target='_blank'
             rel='noreferrer'
           >
-            <Image
-              src='../src/assets/LI-Logo.png'
-              thumbnail
-              className='aboutPageImage'
-            />
+            <Image src={LinkedInLogo} thumbnail className='aboutPageImage' />
           </a>
           <h3>Baden's LinkedIn</h3>
         </Col>
@@ -62,11 +59,7 @@ const About = () => {
             target='_blank'
             rel='noreferrer'
           >
-            <Image
-              src='../src/assets/resume-screenshot.png'
-              thumbnail
-              className='aboutPageImage'
-            />
+            <Image src={ResumeThumbnail} thumbnail className='aboutPageImage' />
           </a>
           <h3>Baden's Resume</h3>
         </Col>
