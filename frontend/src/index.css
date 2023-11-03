@@ -32,10 +32,6 @@ body {
   color: #ff492f;
 }
 
-/* .Sci-Fi-Buddy_Tabs {
-  background-color: #ffe28c;
-} */
-
 .nav-tabs .nav-link {
   background-color: transparent !important;
   color: black !important;
@@ -73,6 +69,17 @@ body {
 .brandText {
   font-family: 'Exo', cursive;
   font-size: 1.5rem !important;
+}
+
+.aboutPageText {
+  font-size: 1.3em !important;
+  font-weight: 400 !important;
+}
+
+.aboutPageImage {
+  width: 50%;
+  background: transparent;
+  border: none;
 }
 
 /* Loading Spinner */

@@ -13,7 +13,9 @@ import {
   FaSignOutAlt,
   FaCentos,
 } from 'react-icons/fa';
-import { BsRobot } from 'react-icons/bs';
+import { MdOutlineHelp } from 'react-icons/md';
+
+import { PiFlyingSaucerDuotone } from 'react-icons/pi';
 import { LinkContainer } from 'react-router-bootstrap';
 import Container from 'react-bootstrap/Container';
 import Nav from 'react-bootstrap/Nav';
@@ -36,19 +38,19 @@ const Header = () => {
   };
 
   const authLinks = user && (
-    <Nav.Link onClick={logOut}>
+    <Nav.Link onClick={logOut} className='me-2'>
       <FaSignOutAlt /> Logout {user.name}
     </Nav.Link>
   );
 
   const guestLinks = (
     <>
-      <LinkContainer to='/login' className='mx-2'>
+      <LinkContainer to='/login' className='me-2'>
         <Nav.Link>
           <FaSignInAlt /> Login
         </Nav.Link>
       </LinkContainer>
-      <LinkContainer to='/register' className='mx-2'>
+      <LinkContainer to='/register' className='me-2'>
         <Nav.Link>
           <FaUserAstronaut /> Register
         </Nav.Link>
@@ -61,16 +63,16 @@ const Header = () => {
       <Container>
         <LinkContainer to='/'>
           <Navbar.Brand className='brandText'>
-            <BsRobot />
+            <PiFlyingSaucerDuotone />
             Sci-Fi Buddy
           </Navbar.Brand>
         </LinkContainer>
         <Navbar.Toggle aria-controls='basic-navbar-nav' />
         <Navbar.Collapse className='justify-content-end'>
           {user ? authLinks : guestLinks}
-          <LinkContainer to='/about' className='mx-2'>
+          <LinkContainer to='/about'>
             <Nav.Link>
-              <FaCentos /> About
+              <MdOutlineHelp /> About
             </Nav.Link>
           </LinkContainer>
         </Navbar.Collapse>
