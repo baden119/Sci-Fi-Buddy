@@ -7,12 +7,7 @@ import {
   clearAutoComplete,
   clearSearchBarText,
 } from '../context/novels/NovelsState';
-import {
-  FaSignInAlt,
-  FaUserAstronaut,
-  FaSignOutAlt,
-  FaCentos,
-} from 'react-icons/fa';
+import { FaSignInAlt, FaUserAstronaut, FaSignOutAlt } from 'react-icons/fa';
 import { MdOutlineHelp } from 'react-icons/md';
 
 import { PiFlyingSaucerDuotone } from 'react-icons/pi';
