@@ -56,7 +56,7 @@ const autocomplete = asyncHandler(async (req, res) => {
     },
 
     {
-      $limit: 7,
+      $limit: 20,
     },
   ];
 

@@ -38,10 +38,9 @@ File selection and DB specifications are configured manually, and the programme 
 */
 
 // File selection and DB Specification configuration:
-const { uri } = require('atlas_uri.js');
-
-const rawDataFileName = './raw_data/BSFA_Award_for_Best_Novel_complete2023.csv';
-const award = 'BSFA Award for Best Novel';
+const uri = require('./atlas_uri.js');
+const rawDataFileName = './raw_data/Retro_Hugos.csv';
+const award = 'Retro Hugo';
 
 // Import 3rd party Packages
 const { MongoClient } = require('mongodb');
@@ -65,6 +64,11 @@ const readRawData = (rawDataFileName) => {
 };
 
 const formatData = (data) => {
+  const removeBrackets = (string) => {
+    const step1 = string.replace(/ *\([^)]*\) */g, '');
+    const step2 = step1.replace(/\[.*?\]/g, '');
+    return step2;
+  };
   const formattedData = [];
   for (let index = 0; index < data.length; index++) {
     let Winner;
@@ -76,8 +80,8 @@ const formatData = (data) => {
     }
     if (data[index].Novel && data[index].Author) {
       const novelData = {
-        title: data[index].Novel.replace(/\[.*?\]/g, ''),
-        author: data[index].Author.replace(/\[.*?\]/g, ''),
+        title: removeBrackets(data[index].Novel),
+        author: removeBrackets(data[index].Author),
         year: data[index].Year,
         winner: Winner,
         award,
@@ -106,13 +110,38 @@ const queryDBforNovels = async (novelsArray, client) => {
         },
       });
 
+      // Handle failed API Search
       if (!res.data.docs[0]) {
-        console.log(
-          'Novel not found in OpenLibrary, skipping...' +
-            novel.title +
-            novel.author
-        );
-        return false;
+        // Attempt to search again with concattenated title string
+
+        try {
+          const res = await axios.get('https://openlibrary.org/search.json', {
+            params: {
+              title: novel.title.split(':')[0],
+              author: novel.author,
+              limit: 1,
+            },
+          });
+          if (res.data.docs[0]) {
+            console.log('Second Attempt Search Successful');
+            return res;
+          } else {
+            fs.appendFile(
+              './unableToAdd.txt',
+              JSON.stringify([novel.title + ' ' + novel.author]),
+              function (err) {
+                if (err) throw err;
+                console.log('Saved!');
+              }
+            );
+            console.log(
+              'API search failure, unable to add ' + novel.title + novel.author
+            );
+            return false;
+          }
+        } catch (err) {
+          `Error Querying OpenLibrary API (Second Search): ${err}`;
+        }
       }
 
       if (res.data.docs[0].key) {
@@ -149,6 +178,11 @@ const queryDBforNovels = async (novelsArray, client) => {
   const dbname = 'Buddy-Data';
   const collection_name = 'Novels';
   const awardItemsWithDB_ID = [];
+
+  // Clear contents of log file
+  fs.truncate('./unableToAdd.txt', 0, function () {
+    console.log('Log File Cleared');
+  });
 
   try {
     await client.connect();

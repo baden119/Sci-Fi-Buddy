@@ -19,11 +19,17 @@ const About = () => {
         <p>
           Every novel in the Sci-Fi-Buddy database has either been nominated
           for, or received one of the genres major awards. The award information{' '}
-          <a href='https://en.wikipedia.org/wiki/Hugo_Award_for_Best_Novel'>
+          <a
+            href='https://en.wikipedia.org/wiki/Hugo_Award_for_Best_Novel'
+            target='_blank'
+            rel='noreferrer'
+          >
             was gathered from Wikipedia
           </a>
           , and all cover images{' '}
-          <a href='https://openlibrary.org/'>are found on OpenLibrary.</a>
+          <a href='https://openlibrary.org/' target='_blank' rel='noreferrer'>
+            are found on OpenLibrary.
+          </a>
         </p>
         <p>
           Sci-Fi-Buddy is a portfolio project made by Baden Allen in 2023 using
@@ -35,7 +41,7 @@ const About = () => {
       <Row className='show-grid text-center align-items-center'>
         <Col xs={12} sm={4} className='mb-5'>
           <a
-            href='https://github.com/baden119/Pbspotify2'
+            href='https://github.com/baden119/Sci-Fi-Buddy'
             target='_blank'
             rel='noreferrer'
           >
@@ -55,7 +61,7 @@ const About = () => {
         </Col>
         <Col xs={12} sm={4} className='mb-5'>
           <a
-            href='https://docs.google.com/document/d/e/2PACX-1vTr_div9rvh3RUpZcgqAPJwlhby9lHERCzsLvaS77sROQDa3Mec-hQUjfNc-5j5Kvk_fMXgeraVKE_B/pub'
+            href='https://docs.google.com/document/d/e/2PACX-1vSVBSCIuOe_MPPLmAr6MWuJ7qXkBFXv8LFdGOprVsBvBvDsMJprZT0jRxn8iBiDV8ddHoZsyaTVQTYG/pub'
             target='_blank'
             rel='noreferrer'
           >
