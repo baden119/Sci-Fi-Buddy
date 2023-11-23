@@ -15,11 +15,11 @@ MongoClient.connect(uri).then((client) => {
 });
 
 const app = express();
-app.use(
-  cors({
-    origin: 'https://sci-fi-buddy-app.onrender.com',
-  })
-);
+// app.use(
+//   cors({
+//     origin: 'https://sci-fi-buddy-app.onrender.com',
+//   })
+// );
 
 app.use(express.json());
 
@@ -29,8 +29,6 @@ app.use('/api/users', require('./routes/userRoutes'));
 app.use('/api/search', require('./routes/searchRoutes'));
 app.use('/api/awards', require('./routes/awardRoutes'));
 app.use('/api/records', require('./routes/recordsRoutes.js'));
-
-app.use('/api/abstract', require('./routes/abstractRoutes.js'));
 
 app.get('/api/version', (req, res) => {
   res.send('Server Version: ' + version);

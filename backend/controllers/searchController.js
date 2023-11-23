@@ -68,11 +68,11 @@ const autocomplete = asyncHandler(async (req, res) => {
   }
 });
 
-// @desc    Returns data on novels from an array of ID's
+// @desc    Returns data on novels from an array of ID's.
 // @route   POST /api/search/array
 // @access  Public
 
-// array api request sent directly from frontend MyList component rather than via Contect API NovelState
+// array api request sent directly from frontend MyList component rather than via Context API NovelState
 
 const array = asyncHandler(async (req, res) => {
   // Pull connection client into module and specify Database and Collection
