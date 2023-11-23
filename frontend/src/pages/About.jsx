@@ -61,7 +61,7 @@ const About = () => {
         </Col>
         <Col xs={12} sm={4} className='mb-5'>
           <a
-            href='https://docs.google.com/document/d/e/2PACX-1vSVBSCIuOe_MPPLmAr6MWuJ7qXkBFXv8LFdGOprVsBvBvDsMJprZT0jRxn8iBiDV8ddHoZsyaTVQTYG/pub'
+            href='https://docs.google.com/document/d/1QJt2E8w6OW4uuYJPGgXOHL1TIHEVU-meACbn7eJGJI4/edit?usp=sharing'
             target='_blank'
             rel='noreferrer'
           >

@@ -1,4 +1,4 @@
-# [Sci-Fi-Buddy](https://sci-fi-buddy.cyclic.app/about 'Sci-Fi-Buddy')
+# [Sci-Fi-Buddy](https://sci-fi-buddy.cyclic.app 'Sci-Fi-Buddy')
 
 Sci-Fi-Buddy allows users to search a database of Science Fiction novels, then create notes and ratings of the works they have finished or plan to read in the future.
 
