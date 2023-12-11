@@ -36,6 +36,11 @@ body {
   color: #ff492f;
 }
 
+.centered {
+  display: flex;
+  /* align-items: center; */
+  justify-content: center;
+}
 .nav-tabs .nav-link {
   background-color: transparent !important;
   color: black !important;

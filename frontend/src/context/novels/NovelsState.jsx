@@ -105,7 +105,6 @@ export const createRecord = async (dispatch, data) => {
       },
     };
     const res = await axios.post('/api/records/', recordData, config);
-    console.log(res.data);
     dispatch({
       type: CREATE_RECORD,
       payload: res.data.record,

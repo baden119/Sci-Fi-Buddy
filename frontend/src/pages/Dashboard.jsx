@@ -12,6 +12,7 @@ import Tab from 'react-bootstrap/Tab';
 import Tabs from 'react-bootstrap/Tabs';
 import Badge from 'react-bootstrap/Badge';
 
+import Browse from '../components/Browse';
 import Search from '../components/Search';
 import MyList from '../components/MyList';
 
@@ -59,6 +60,9 @@ const Dashboard = () => {
       <Tabs defaultActiveKey='search' className='Sci-Fi-Buddy_Tabs mb-3'>
         <Tab eventKey='search' title='Search'>
           <Search />
+        </Tab>
+        <Tab eventKey='browse' title='Browse'>
+          <Browse />
         </Tab>
         {user && (
           <Tab

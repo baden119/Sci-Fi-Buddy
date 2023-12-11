@@ -8,7 +8,6 @@ import {
   deleteRecord,
   clearSelectedNovel,
   clearAwards,
-  setLoading,
 } from '../context/novels/NovelsState';
 import PropTypes from 'prop-types';
 import Form from 'react-bootstrap/Form';
@@ -108,7 +107,6 @@ const NovelModal = (props) => {
   };
 
   const handleRecordSubmit = () => {
-    setLoading(novelsDispatch);
     const data = {
       recordData: recordForm,
       token: user.token,
