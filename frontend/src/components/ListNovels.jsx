@@ -60,7 +60,7 @@ const ListNovels = (props) => {
               action
             >
               <Row>
-                <Col xs={6} className='d-flex align-items-start'>
+                <Col xs={9} className='d-flex align-items-start'>
                   <Image
                     className='me-2'
                     src={
@@ -76,7 +76,7 @@ const ListNovels = (props) => {
                   </div>
                 </Col>
                 {record && (
-                  <Col className='m-auto' xs={3}>
+                  <Col className='m-auto w-auto' xs={3}>
                     <Rating
                       initialValue={record.rating}
                       readonly={true}
