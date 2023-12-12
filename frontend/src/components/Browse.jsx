@@ -2,8 +2,7 @@ import { useEffect, useState } from 'react';
 import axios from 'axios';
 import ListNovels from './ListNovels';
 
-import Dropdown from 'react-bootstrap/Dropdown';
-import DropdownButton from 'react-bootstrap/DropdownButton';
+import Form from 'react-bootstrap/Form';
 
 const Browse = () => {
   const [browseResults, setBrowseResults] = useState([]);
@@ -26,47 +25,40 @@ const Browse = () => {
   }, [setBrowseResults, browseChar]);
 
   const renderDropDown = () => {
-    const selectAThing = (e) => {
-      setBrowseChar(e);
-    };
-
     return (
       <div className='centered'>
-        <DropdownButton
-          onSelect={selectAThing}
-          variant='danger'
-          title={browseChar}
+        <Form.Select
           size='lg'
+          placeholder='Author Initial'
+          onChange={(e) => setBrowseChar(e.target.value)}
         >
-          <Dropdown.Item eventKey='A' active>
-            A
-          </Dropdown.Item>
-          <Dropdown.Item eventKey='B'>B</Dropdown.Item>
-          <Dropdown.Item eventKey='C'>C</Dropdown.Item>
-          <Dropdown.Item eventKey='D'>D</Dropdown.Item>
-          <Dropdown.Item eventKey='E'>E</Dropdown.Item>
-          <Dropdown.Item eventKey='F'>F</Dropdown.Item>
-          <Dropdown.Item eventKey='G'>G</Dropdown.Item>
-          <Dropdown.Item eventKey='H'>H</Dropdown.Item>
-          <Dropdown.Item eventKey='I'>I</Dropdown.Item>
-          <Dropdown.Item eventKey='J'>J</Dropdown.Item>
-          <Dropdown.Item eventKey='K'>K</Dropdown.Item>
-          <Dropdown.Item eventKey='L'>L</Dropdown.Item>
-          <Dropdown.Item eventKey='M'>M</Dropdown.Item>
-          <Dropdown.Item eventKey='N'>N</Dropdown.Item>
-          <Dropdown.Item eventKey='O'>O</Dropdown.Item>
-          <Dropdown.Item eventKey='P'>P</Dropdown.Item>
-          <Dropdown.Item eventKey='Q'>Q</Dropdown.Item>
-          <Dropdown.Item eventKey='R'>R</Dropdown.Item>
-          <Dropdown.Item eventKey='S'>S</Dropdown.Item>
-          <Dropdown.Item eventKey='T'>T</Dropdown.Item>
-          <Dropdown.Item eventKey='U'>U</Dropdown.Item>
-          <Dropdown.Item eventKey='V'>V</Dropdown.Item>
-          <Dropdown.Item eventKey='W'>W</Dropdown.Item>
-          <Dropdown.Item eventKey='X'>X</Dropdown.Item>
-          <Dropdown.Item eventKey='Y'>Y</Dropdown.Item>
-          <Dropdown.Item eventKey='Z'>Z</Dropdown.Item>
-        </DropdownButton>
+          <option value='A'>A</option>
+          <option value='B'>B</option>
+          <option value='C'>C</option>
+          <option value='D'>D</option>
+          <option value='E'>E</option>
+          <option value='F'>F</option>
+          <option value='G'>G</option>
+          <option value='H'>H</option>
+          <option value='I'>I</option>
+          <option value='J'>J</option>
+          <option value='K'>K</option>
+          <option value='L'>L</option>
+          <option value='M'>M</option>
+          <option value='N'>N</option>
+          <option value='O'>O</option>
+          <option value='P'>P</option>
+          <option value='Q'>Q</option>
+          <option value='R'>R</option>
+          <option value='S'>S</option>
+          <option value='T'>T</option>
+          <option value='U'>U</option>
+          <option value='V'>V</option>
+          <option value='W'>W</option>
+          <option value='X'>X</option>
+          <option value='Y'>Y</option>
+          <option value='Z'>Z</option>
+        </Form.Select>
       </div>
     );
   };
@@ -79,6 +71,7 @@ const Browse = () => {
 
   return (
     <>
+      <h3>Browse by Author Sirname:</h3>
       {renderDropDown()}
       {renderResults()}
     </>
