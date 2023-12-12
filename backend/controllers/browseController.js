@@ -73,6 +73,65 @@ const author = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    Browse novels database by Title
+// @route   POST /api/browse/title
+// @access  Public
+
+/*
+Similar to Author browse above, this endpoint also takes a single character input and returns alphabetised array of all novels in the database with titles beginning with the selected letter.
+
+Titles are stored in the database as strings which are converted to arrays, then the first character of the first word is matched to the input and the results are sorted alphabetically then returned.
+
+*/
+const title = asyncHandler(async (req, res) => {
+  const client = req.app.locals.client;
+  const db = client.db('Buddy-Data');
+  const collection = db.collection('Novels');
+
+  const char = req.body.char;
+
+  const agg = [
+    {
+      $addFields: {
+        titleArray: {
+          $split: ['$title', ' '],
+        },
+      },
+    },
+    {
+      $addFields: {
+        firstCharTitle: {
+          $substrCP: [
+            {
+              $first: '$titleArray',
+            },
+            0,
+            1,
+          ],
+        },
+      },
+    },
+    {
+      $match: {
+        firstCharTitle: char,
+      },
+    },
+    {
+      $sort: {
+        title: 1,
+      },
+    },
+  ];
+
+  try {
+    let results = await collection.aggregate(agg).toArray();
+    res.status(200).json({ results });
+  } catch (err) {
+    console.error(`Error in Title Browse Route ${err}`);
+  }
+});
+
 module.exports = {
   author,
+  title,
 };
