@@ -1,7 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
 import ListNovels from './ListNovels';
-
 import Form from 'react-bootstrap/Form';
 
 const Browse = () => {
@@ -9,19 +8,18 @@ const Browse = () => {
   const [browseChar, setBrowseChar] = useState('A');
 
   useEffect(() => {
-    const hitAPI = async () => {
+    const browseByInitial = async () => {
       try {
         const res = await axios.post('/api/browse/author', {
           char: browseChar,
         });
-        // console.log(res.data.msg);
         setBrowseResults(res.data.results);
       } catch (error) {
         console.log(error);
       }
     };
 
-    hitAPI();
+    browseByInitial();
   }, [setBrowseResults, browseChar]);
 
   const renderDropDown = () => {
@@ -30,6 +28,7 @@ const Browse = () => {
         <Form.Select
           size='lg'
           placeholder='Author Initial'
+          className='Search-Bar'
           onChange={(e) => setBrowseChar(e.target.value)}
         >
           <option value='A'>A</option>
