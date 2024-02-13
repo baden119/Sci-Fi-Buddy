@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 import { useAuth, logout } from '../context/auth/AuthState';
 import {
   getRecords,
@@ -24,8 +25,7 @@ const Dashboard = () => {
   // Initialise and destructure App level state
   const [novelsState, novelsDispatch] = useNovels();
   const { records, loading, novelError } = novelsState;
-  // destructure auth state without the dispatch
-  const authState = useAuth()[0];
+  const [authState, authDispatch] = useAuth();
   const { user } = authState;
 
   useEffect(() => {
@@ -41,15 +41,20 @@ const Dashboard = () => {
     if (novelError) {
       toast.error(novelError);
       clearNovelErrors(novelsDispatch);
-      logout();
+      logout(authDispatch);
     }
 
     if (user) {
+      // Decode token held in local storage and check for expiry.
+      const decoded = jwtDecode(user.token);
+      if (decoded.exp * 1000 <= Date.now()) {
+        logout(authDispatch);
+      }
       if (!records) {
         getRecords(novelsDispatch, user.token);
       }
     }
-  }, [user, navigate, novelsDispatch, records, novelError]);
+  }, [user, navigate, novelsDispatch, authDispatch, records, novelError]);
 
   if (!serverConnect) {
     return <h1> Waiting for server</h1>;

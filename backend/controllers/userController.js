@@ -10,7 +10,6 @@ const registerUser = asyncHandler(async (req, res) => {
   const client = req.app.locals.client;
   const db = client.db('Auth');
   const collection = db.collection('Users');
-  console.log('register route 01');
 
   const { name, password } = req.body;
 

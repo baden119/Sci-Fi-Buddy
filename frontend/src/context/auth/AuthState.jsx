@@ -38,7 +38,6 @@ export const login = async (dispatch, formData) => {
 export const register = async (dispatch, formData) => {
   try {
     const res = await axios.post('/api/users', formData);
-    console.log(res.data);
     dispatch({
       type: REGISTER_SUCCESS,
       payload: res.data,
